@@ -82,5 +82,5 @@ localhost:5000
 
 ![课程论坛](./exampleImage/discuss.png)
 
-
+![ai助手](./exampleImage/aiAssistant.png)
 
