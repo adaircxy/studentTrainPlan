@@ -15,7 +15,7 @@
 <div class="header_box"></div>
 <div class="header_box1">
     <div class="header_box2">
-         <a class="logo_box" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename="images/logo1.jpeg") }}"/></a>
+         <a class="logo_box" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename="images/logo1.jpg") }}"/></a>
          <ul class="nav_box">
              <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
              <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
@@ -44,13 +44,16 @@
 			 //});
           </script>
 </div>
+<!-- 导航下方展示图 -->
+<div class="nav-sub-image">
+    <img src="{{ url_for('static', filename="images/logo.jpeg") }}" alt="江西师范大学教务在线" />
+</div>
 <!--banner部分开始-->
   <div class="banner_box">
         <ul class="banner_pic">
-            <li><img src="../static/images/logo.jpeg" /></li>
-            <li><img src="../static/images/logo.jpeg" /></li>
-            <li><img src="../static/images/logo.jpeg" /></li>
-
+            <li><img src="../static/images/banner2.jpg" /></li>
+            <li><img src="../static/images/jj_pic.jpg" /></li>
+            <li><img src="../static/images/logo1920.jpeg" /></li>
         </ul>
         <a class="prev" href="javascript:void(0)"></a>
         <a class="next" href="javascript:void(0)"></a>
@@ -353,6 +356,21 @@ $(function() {
     border: 1px solid #dcdcdc;
     border-radius: 6px;
     background: #fafafa;
+}
+
+.nav-sub-image {
+    width: 100%;
+    background: #fff;
+    text-align: center;
+    padding: 0;
+}
+
+.nav-sub-image img {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    border-radius: 6px;
 }
 
 /* 输入区域固定在底部 */
