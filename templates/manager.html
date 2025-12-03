@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>管理界面</title>
     <link rel="stylesheet" type="text/css" href="../static/css/register-login.css">
     <link rel="icon" href="../static/images/logo.ico" type="image/x-icon"/>
@@ -15,9 +17,82 @@
             width: 100%;
             text-align: center;
         }
+        
+        .message-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* 防止遮挡页面交互 */
+        }
+        
+        .alert-message {
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            position: relative;
+            min-width: 250px;
+            animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+            pointer-events: auto; /* 允许消息框本身可以交互 */
+        }
+        
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        
+        .alert-error {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: inherit;
+        }
+        
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(-20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        @keyframes fadeOut {
+            from {opacity: 1; transform: translateY(0);}
+            to {opacity: 0; transform: translateY(-20px);}
+        }
     </style>
 </head>
 <body>
+
+<!-- 显示闪现消息 -->
+<div class="message-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert-message alert-{{ 'error' if category == 'error' else 'success' }}" id="flash-message">
+                    {{ message }}
+                    <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
 <div style = 'text-align: center;'><font color="#4169E1" size="10">管理界面</font></div>
 <div class="a">
     <table style = 'text-align: center; width: 100%' border='1'>
@@ -35,8 +110,25 @@
 
     <div style="display:inline-block;margin-left:10px;"> <a href="{{ url_for('managerEdit') }}"><button type="submit" class="login-btn register-btn" id="button", style="width: 150px">编辑用户</button></a></div>
 
+    <div style="display:inline-block;margin-left:10px;"> <a href="{{ url_for('managerBroadcast') }}"><button type="submit" class="login-btn register-btn" id="button", style="width: 150px">发布公告</button></a></div>
     </div>
     <br/>
 </div>
+
+<script>
+    // 自动隐藏成功消息
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(function() {
+            let messages = document.querySelectorAll('.alert-message');
+            messages.forEach(function(message) {
+                message.style.animation = 'fadeOut 0.3s forwards';
+                setTimeout(function() {
+                    message.style.display = 'none';
+                }, 300);
+            });
+        }, 3000); // 3秒后自动关闭
+    });
+</script>
+
 </body>
 </html>
