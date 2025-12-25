@@ -2,176 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="../static/css/style1.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../static/css/register-login.css">
-    <link rel="icon" href="../static/images/logo.ico" type="image/x-icon"/>
-<script src="../static/js/jquery1.42.min.js" type="text/javascript"></script>
-<script src="../static/js/jquery.js"></script>
-<script src="../static/js/jquery.superslide.2.1.1.js" type="text/javascript"></script>
-<title>评论回复</title>
+<link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet" type="text/css" />
+<link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon"/>
+<script src="{{ url_for('static', filename='js/jquery1.42.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+<title>话题详情</title>
 </head>
-<style type="text/css">
-.article-container{
-    background-color: #ffffff;
-    padding-top:20px;
-    width:1024px;
-    margin:20px auto;
-  }
-
-  .article_r{
-    padding-top:10px;
-    float:right;
-  }
-  .pulisher,.time,.article_view,.article_comments,.article_del{
-    clear:both;
-    margin-right:25px;
-    font-size: 15px;
-  }
-  .title{
-    font-weight:bold;
-    font-size: 30px;
-    text-align: center;
-  }
-  .article_content{
-    background: #ffffff;
-    clear:both;
-    padding:1em 4em;
-    margin-top: 40px;
-  }
-  p{
-    text-indent: 2em;
-    text-overflow: hidden;
-    font-size:18px;
-  }
-
-  /*话题内容图片*/
-  .ImgContent{
-    width:350px;
-    margin:0px auto;
-    padding: 5px;
-    overflow:hidden;
-
-}
-
-.NavLinks{
-    padding:5px;
-    width:100px;
-    height: 100px;
-    float: left;
-    overflow: hidden;
-}
-
-.NavLinks img{
-    width: 100%;
-    height: 100%;
-}
-.hitShowPic {
-width:350px;
-clear:both;
-margin-left:430px;
-}
-.hitShowPic span {
-  font-size: 15px;
-  text-align: center;
-}
-    /*以下评论的css*/
-   .show_reply_list {
-    margin-right:1em;
-     color: grey;
-   }
-    .comment_list {
-    background-color: #ffffff;
-    padding-top:5px;
-    width:900px;
-    margin:0 auto;
-  }
-    .comment {
-      width:900px;
-      margin-top:10px;
-    }
-    .comment_details {
-      float:right;
-    }
-    .comment_content {
-      clear:both;
-      margin:5px 50px;
-      font-size:16px;
-    }
-  .comment_add_or_last {
-
-    margin:0 auto;
-    clear: both;
-    width:600px;
-    height:50px;
-    background: #F0F0F0;
-    text-align: center;
-    font-size:20px;
-     line-height: 40px;   //行高（与div保持同高，垂直居中写法）
-     margin-bottom: 40px;
-  }
-  .imgdiv{
-       width:80px;
-       height:70px;
-      float:left;
-
-  }
-  .imgcss {
-    width:60px;
-    height:60px;
-    border-radius: 50%;
-  }
-  .comment_name {
-    margin-left:10px;
-    color:#3D9EEA;
-    font-size:16px;
-    font-weight: bolder;
-  }
-  .layui-icon {
-    font-size: 13px;
-    color: grey;
-  }
-  .del {
-    float:right;
-
-  }
-  .del_comment {
-     margin-right:50px;
-  }
-
-
-
-  .reply_list {
-    clear:both;
-    display:none;
-    width:900px;
-
-    padding-right:15px;
-    margin-top:10px;
-      font-size:16px;
-
-  }
-  .reply {
-    clear:both;
-    width:700px;
-    margin:4px auto;
-
-  }
-  .reply_name {
-    color:#3D9EEA;
-  }
-  .del_reply {
-      float:right;
-  }
-  .show_remain_reply {
-     width:600px;
-     height:40px;
-     text-align:center;font-size:18px;
-     background-color: #F0F0F0;
-     margin:0 auto;
-     line-height: 40px;
-     display:none;
-  }
-</style>
 
 <body>
 <div class="wapper_box">
@@ -179,107 +15,586 @@ margin-left:430px;
     <div class="header_box1">
         <div class="header_box2">
             <a class="logo_box" href="{{ url_for('index') }}">
-                <img src="../static/images/logo1.jpg"/></a>
+                <img src="{{ url_for('static', filename='images/logo1.jpg') }}"/></a>
             <ul class="nav_box">
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
                     <div class="nav_slide">
                         <div class="nav_slide1">
-                            <a href="{{ url_for('news_center') }}">课程公告<span>
-                            <img src="../static/images/siade_bg1.png"/></span></a>
-                        <a href="{{ url_for('course_discussion') }}">课程讨论<span>
-                            <img src="../static/images/siade_bg1.png"/></span></a>
+                            <a href="{{ url_for('news_center') }}">课程讨论<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
+                            <a href="{{ url_for('course_discussion') }}">发布话题<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
         </div>
     </div>
     </li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('recommed') }}">课程推荐</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('course_selection') }}">选课中心</a></li>
     <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
-    <li class="nav_1"><a class="nav_but" href= "{{ url_for('index') }}">首页</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('index') }}">首页</a></li>
     </ul>
 </div>
 <script>
     $(".nav_1").mouseenter(function(){
         $(this).find(".nav_slide").slideDown()
     });
-
     $(".nav_1").mouseleave(function(){
         $(".nav_slide").slideUp()
     });
-    //$(".producys_box").mouseout(function(){
-    // $(this).find(".producys_box1").slideUp();
-    //});
 </script>
 </div>
-<!--banner部分开始-->
-<div class="banner_box">
-    <ul class="banner_pic">
-        <li><img src="../static/images/logo.jpeg" /></li>
-        <li><img src="../static/images/logo.jpeg" /></li>
-        <li><img src="../static/images/logo.jpeg" /></li>
 
-    </ul>
-    <a class="prev" href="javascript:void(0)"></a>
-    <a class="next" href="javascript:void(0)"></a>
-    <div class="num"><ul></ul></div>
+    <!-- 话题详情主体内容 -->
+    <div class="detail_container">
+        <div class="detail_card">
+            <!-- 话题头部 -->
+            <div class="topic_header_detail">
+                <div class="topic_title_section">
+                    <h1 class="topic_title_main">{{ title[0] }}</h1>
+                    <div class="topic_meta_info">
+                        <span class="meta_item">
+                            <span class="meta_icon">👤</span>
+                            <span class="meta_text">{{ title[2] }}</span>
+                        </span>
+                        <span class="meta_item">
+                            <span class="meta_icon">🕐</span>
+                            <span class="meta_text">{{ title[3] }}</span>
+                        </span>
+                        <a href="{{ url_for('news_center') }}" class="back_to_forum">← 返回论坛</a>
+                    </div>
+                </div>
 </div>
-<script>
-    /*鼠标移过，左右按钮显示*/
-    $(".banner_box").hover(function(){
-        $(this).find(".prev,.next").fadeTo("show",0.1);
-    },function(){
-        $(this).find(".prev,.next").hide();
-    })
-    /*鼠标移过某个按钮 高亮显示*/
-    $(".prev,.next").hover(function(){
-        $(this).fadeTo("show",0.7);
-    },function(){
-        $(this).fadeTo("show",0.1);
-    })
-    $(".banner_box").slide({ titCell:".num ul" , mainCell:".banner_pic" , effect:"fold", autoPlay:true, delayTime:700 , autoPage:true });
-</script>
-<!-- 代码 结束 -->
-<!--banner部分结束-->
 
-
-
-<form method="post">
-<div style="width:800px;margin:10px auto">
-    <table>
-        <tr><td><textarea  name="comments" style="width:800px;height:200px"></textarea></td></tr>
-        <tr><td>
-            <div class="button" align="center">
-                <button type="submit" class="login-btn register-btn" id="button" style="width: 100px">回复</button>
+            <!-- 话题内容 -->
+            <div class="topic_content_detail">
+                <div class="content_text">{{ title[1] }}</div>
             </div>
-        </td></tr>
-    </table>
+
+            <!-- 回复区域 -->
+            <div class="replies_section">
+                <div class="replies_header">
+                    <h3 class="replies_title">
+                        <span class="replies_count" id="replies-count">{{ result|length if result else 0 }}</span> 条回复
+                    </h3>
+                    <button class="btn_refresh" id="refresh-btn">🔄 刷新</button>
+                </div>
+
+                <!-- 回复列表 -->
+                <div class="replies_list" id="replies-list">
+                    {% if result %}
+                        {% for message in result %}
+                        <div class="reply_item">
+                            <div class="reply_header">
+                                <div class="reply_author">
+                                    <span class="author_name">{{ message[2] }}</span>
+                                    {% if '老师' in message[2] or '教授' in message[2] %}
+                                    <span class="author_badge teacher_badge">教师</span>
+                                    {% endif %}
+                                </div>
+                                <span class="reply_time">{{ message[3] if message[3] else '未知时间' }}</span>
+                            </div>
+                            <div class="reply_content">
+                                {{ message[1] }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no_replies">暂无回复，快来发表第一条回复吧！</div>
+                    {% endif %}
+                </div>
+
+                <!-- 回复表单 -->
+                <div class="reply_form_section">
+                    <h4 class="form_title">发表回复</h4>
+                    <form id="reply-form">
+                        <textarea id="reply-content" name="comments" placeholder="请输入您的回复内容..." required rows="6"></textarea>
+                        <div class="form_footer">
+                            <div class="char_count">
+                                <span id="reply-char-count">0</span> / 1000 字
+                            </div>
+                            <button type="submit" class="btn_submit_reply" id="submit-reply-btn">发表回复</button>
 </div>
 </form>
-
-
-
+                </div>
+            </div>
+        </div>
 </div>
 </div>
 
-<!--内容结束-->
-</div>
+<script>
+$(function() {
+    var topicId = "{{ question }}";
+    
+    // 字符计数
+    $("#reply-content").on("input", function() {
+        var length = $(this).val().length;
+        $("#reply-char-count").text(length);
+        
+        if (length > 1000) {
+            $(this).val($(this).val().substring(0, 1000));
+            $("#reply-char-count").text(1000);
+            showNotification("回复内容不能超过1000字", "warning");
+        }
+    });
+    
+    // 刷新回复列表
+    $("#refresh-btn").click(function() {
+        loadReplies();
+    });
+    
+    // 加载回复列表
+    function loadReplies() {
+        $.ajax({
+            url: "/api/get_topic_replies",
+            type: "GET",
+            data: { topic_id: topicId },
+            success: function(res) {
+                if (res.success && res.data) {
+                    renderReplies(res.data);
+                    $("#replies-count").text(res.data.length);
+                }
+            },
+            error: function() {
+                showNotification("刷新失败，请稍后重试", "error");
+            }
+        });
+    }
+    
+    // 渲染回复列表
+    function renderReplies(replies) {
+        if (replies.length === 0) {
+            $("#replies-list").html('<div class="no_replies">暂无回复，快来发表第一条回复吧！</div>');
+            return;
+        }
+        
+        var html = '';
+        replies.forEach(function(reply) {
+            var teacherBadge = '';
+            if (reply.commenter && (reply.commenter.indexOf('老师') >= 0 || reply.commenter.indexOf('教授') >= 0)) {
+                teacherBadge = '<span class="author_badge teacher_badge">教师</span>';
+            }
+            
+            html += `
+                <div class="reply_item">
+                    <div class="reply_header">
+                        <div class="reply_author">
+                            <span class="author_name">${reply.commenter || '匿名用户'}</span>
+                            ${teacherBadge}
+    </div>
+                        <span class="reply_time">${reply.create_time || '未知时间'}</span>
+    </div>
+                    <div class="reply_content">${reply.comments || ''}</div>
+    </div>
+            `;
+        });
+        
+        $("#replies-list").html(html);
+    }
+    
+    // 提交回复
+    $("#reply-form").submit(function(e) {
+        e.preventDefault();
+        
+        var content = $("#reply-content").val().trim();
+        
+        // 验证
+        if (!content) {
+            showNotification("请输入回复内容", "error");
+            $("#reply-content").focus();
+            return;
+        }
+        
+        if (content.length < 5) {
+            showNotification("回复内容至少需要5个字", "error");
+            $("#reply-content").focus();
+            return;
+        }
+        
+        // 显示加载状态
+        var submitBtn = $("#submit-reply-btn");
+        submitBtn.prop("disabled", true).text("提交中...");
+        
+        // 提交回复
+        $.ajax({
+            url: "/detail/" + topicId,
+            type: "POST",
+            data: {
+                comments: content
+            },
+            success: function(response) {
+                showNotification("回复发表成功！", "success");
+                $("#reply-content").val("");
+                $("#reply-char-count").text(0);
+                
+                // 刷新回复列表
+                setTimeout(function() {
+                    loadReplies();
+                }, 500);
+            },
+            error: function(xhr) {
+                var errorMsg = "回复失败，请稍后重试";
+                if (xhr.responseText) {
+                    try {
+                        var error = JSON.parse(xhr.responseText);
+                        if (error.message) {
+                            errorMsg = error.message;
+                        }
+                    } catch(e) {
+                        // 如果不是JSON，可能是HTML错误页面
+                        if (xhr.status === 200) {
+                            // 可能是成功但返回了HTML
+                            showNotification("回复发表成功！", "success");
+                            $("#reply-content").val("");
+                            $("#reply-char-count").text(0);
+                            setTimeout(function() {
+                                loadReplies();
+                            }, 500);
+                            return;
+                        }
+                    }
+                }
+                showNotification(errorMsg, "error");
+                submitBtn.prop("disabled", false).text("发表回复");
+            },
+            complete: function() {
+                setTimeout(function() {
+                    if (submitBtn.prop("disabled")) {
+                        submitBtn.prop("disabled", false).text("发表回复");
+                    }
+                }, 2000);
+            }
+        });
+    });
+    
+    // 显示通知函数
+    function showNotification(message, type) {
+        type = type || "info";
+        var notification = $('<div class="notification notification-' + type + '">' + message + '</div>');
+        $("body").append(notification);
+        
+        setTimeout(function() {
+            notification.addClass("show");
+        }, 10);
+        
+        setTimeout(function() {
+            notification.removeClass("show");
+            setTimeout(function() {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+    
+    // 自动滚动到回复表单（如果URL包含锚点）
+    if (window.location.hash === '#reply') {
+        setTimeout(function() {
+            $("html, body").animate({
+                scrollTop: $(".reply_form_section").offset().top - 100
+            }, 500);
+            $("#reply-content").focus();
+        }, 300);
+    }
+});
+</script>
 
-    <div class="article_head">
-    <h1 class="title">{{ title[0] }}</h1>
-    <div class="article_r">
-        <span class="pulisher">{{ title[2] }} 发表</span>
-        <span class="time">{{ title[3] }}</span>
-    </div>
-    </div>
-    <div class="article_content">
-        <h2> {{ title[1] }}</h2>
-    </div>
-<hr>
-{% for message in result %}
-    <h3><li><a class="content_boxL_list_info">{{ message[2] }}:【 {{ message[0] }}】 {{ message[1] }}<span class="yewu_date">{{ message[3] }}</span></a></li>
-    </h3>
-    <hr>
-{% endfor %}
+<style>
+/* 详情页容器 */
+.detail_container {
+    width: 1000px;
+    margin: 30px auto;
+    min-height: 600px;
+}
 
+.detail_card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* 话题头部 */
+.topic_header_detail {
+    padding: 30px;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.topic_title_main {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+}
+
+.topic_meta_info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.meta_item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #666;
+}
+
+.meta_icon {
+    font-size: 16px;
+}
+
+.back_to_forum {
+    margin-left: auto;
+    color: #003d79;
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.back_to_forum:hover {
+    text-decoration: underline;
+}
+
+/* 话题内容 */
+.topic_content_detail {
+    padding: 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.content_text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* 回复区域 */
+.replies_section {
+    padding: 30px;
+}
+
+.replies_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.replies_title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.replies_count {
+    color: #003d79;
+}
+
+.btn_refresh {
+    padding: 6px 16px;
+    background: #f5f7fa;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.btn_refresh:hover {
+    background: #e8f0fe;
+    border-color: #003d79;
+    color: #003d79;
+}
+
+/* 回复列表 */
+.replies_list {
+    margin-bottom: 30px;
+}
+
+.reply_item {
+    padding: 20px;
+    margin-bottom: 16px;
+    background: #f9fafb;
+    border-radius: 6px;
+    border-left: 3px solid #003d79;
+    transition: all 0.3s;
+}
+
+.reply_item:hover {
+    background: #f0f4ff;
+    box-shadow: 0 2px 8px rgba(0,61,121,0.1);
+}
+
+.reply_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.reply_author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.author_name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.author_badge {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.teacher_badge {
+    background: #fff7e6;
+    color: #fa8c16;
+}
+
+.reply_time {
+    font-size: 13px;
+    color: #999;
+}
+
+.reply_content {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #666;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.no_replies {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 14px;
+}
+
+/* 回复表单 */
+.reply_form_section {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 6px;
+    border: 1px solid #e8eaed;
+}
+
+.form_title {
+    margin: 0 0 15px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+#reply-content {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+#reply-content:focus {
+    outline: none;
+    border-color: #003d79;
+    box-shadow: 0 0 0 3px rgba(0,61,121,0.1);
+}
+
+.form_footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.char_count {
+    font-size: 12px;
+    color: #999;
+}
+
+.btn_submit_reply {
+    padding: 10px 24px;
+    background: #003d79;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn_submit_reply:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn_submit_reply:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 通知样式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10001;
+    min-width: 250px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: #52c41a;
+    color: #fff;
+}
+
+.notification-error {
+    background: #f5222d;
+    color: #fff;
+}
+
+.notification-warning {
+    background: #faad14;
+    color: #fff;
+}
+
+.notification-info {
+    background: #1890ff;
+    color: #fff;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .detail_container {
+        width: 95%;
+    }
+}
+</style>
 
 </body>
 </html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>jQuery兼容性测试</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-item { margin: 15px 0; padding: 10px; border: 1px solid #ddd; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button { padding: 8px 15px; margin: 5px; }
+        input, textarea { width: 200px; padding: 5px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>jQuery兼容性测试</h1>
+    
+    <div class="test-item">
+        <h3>1. jQuery版本检测</h3>
+        <p>jQuery版本: <span id="jquery-version"></span></p>
+    </div>
+    
+    <div class="test-item">
+        <h3>2. .on() 方法测试</h3>
+        <input type="text" id="test-input" placeholder="输入文字测试.on()方法">
+        <p>输入内容: <span id="input-content"></span></p>
+        <div id="on-test-result"></div>
+    </div>
+    
+    <div class="test-item">
+        <h3>3. 事件委托测试</h3>
+        <button onclick="addButton()">添加动态按钮</button>
+        <div id="dynamic-buttons"></div>
+        <p>点击次数: <span id="click-count">0</span></p>
+        <div id="delegate-test-result"></div>
+    </div>
+    
+    <div class="test-item">
+        <h3>4. AJAX测试</h3>
+        <button onclick="testAjax()">测试AJAX请求</button>
+        <div id="ajax-result"></div>
+    </div>
+    
+    <script>
+    $(function() {
+        // 显示jQuery版本
+        $("#jquery-version").text($.fn.jquery);
+        
+        // 测试.on()方法
+        try {
+            $("#test-input").on("input", function() {
+                $("#input-content").text($(this).val());
+            });
+            $("#on-test-result").html('<span class="success">✅ .on() 方法工作正常</span>');
+        } catch (e) {
+            $("#on-test-result").html('<span class="error">❌ .on() 方法失败: ' + e.message + '</span>');
+        }
+        
+        // 测试事件委托
+        var clickCount = 0;
+        try {
+            $(document).on("click", ".dynamic-btn", function() {
+                clickCount++;
+                $("#click-count").text(clickCount);
+            });
+            $("#delegate-test-result").html('<span class="success">✅ 事件委托设置成功</span>');
+        } catch (e) {
+            $("#delegate-test-result").html('<span class="error">❌ 事件委托失败: ' + e.message + '</span>');
+        }
+    });
+    
+    function addButton() {
+        var buttonHtml = '<button class="dynamic-btn" style="margin: 5px;">动态按钮 ' + ($("#dynamic-buttons button").length + 1) + '</button>';
+        $("#dynamic-buttons").append(buttonHtml);
+    }
+    
+    function testAjax() {
+        $("#ajax-result").html("正在测试AJAX...");
+        
+        $.ajax({
+            url: "/api/get_discussion_topics",
+            type: "GET",
+            data: { page: 1, per_page: 1 },
+            success: function(response) {
+                $("#ajax-result").html('<span class="success">✅ AJAX请求成功</span>');
+            },
+            error: function(xhr, status, error) {
+                $("#ajax-result").html('<span class="error">❌ AJAX请求失败: ' + error + '</span>');
+            }
+        });
+    }
+    </script>
+</body>
+</html>

@@ -2,12 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="../static/css/style1.css" rel="stylesheet" type="text/css" />
-    <link rel="icon" href="../static/images/logo.ico" type="image/x-icon"/>
-<script src="../static/js/jquery1.42.min.js" type="text/javascript"></script>
-<script src="../static/js/jquery.js"></script>
-<script src="../static/js/jquery.superslide.2.1.1.js" type="text/javascript"></script>
-<title>课程论坛</title>
+<link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet" type="text/css" />
+<link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon"/>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<title>发布话题</title>
 </head>
 
 <body>
@@ -16,103 +14,711 @@
     <div class="header_box1">
         <div class="header_box2">
             <a class="logo_box" href="{{ url_for('index') }}">
-                <img src="../static/images/logo1.jpg"/></a>
+                <img src="{{ url_for('static', filename='images/logo1.jpg') }}"/></a>
             <ul class="nav_box">
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
-                <!--251201，用户中心建设完成-->
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
                     <div class="nav_slide">
                         <div class="nav_slide1">
-                            <a href="{{ url_for('news_center') }}">课程讨论<span>
-                            <img src="../static/images/siade_bg1.png"/></span></a>
-                        <a href="{{ url_for('course_discussion') }}">发布话题<span>
-                            <img src="../static/images/siade_bg1.png"/></span></a>
-        </div>
-    </div>
-    </li>
+                            <a href="{{ url_for('news_center') }}">课程讨论<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
+                            <a href="{{ url_for('course_discussion') }}">发布话题<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
+                        </div>
+                    </div>
+                </li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('recommed') }}">课程推荐</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('course_selection') }}">选课中心</a></li>
-    <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
-    <li class="nav_1"><a class="nav_but" href= "{{ url_for('index') }}">首页</a></li>
-    </ul>
-</div>
-<script>
-    $(".nav_1").mouseenter(function(){
-        $(this).find(".nav_slide").slideDown()
-    });
-
-    $(".nav_1").mouseleave(function(){
-        $(".nav_slide").slideUp()
-    });
-    //$(".producys_box").mouseout(function(){
-    // $(this).find(".producys_box1").slideUp();
-    //});
-</script>
-</div>
-<!--banner部分开始-->
-<div class="banner_box">
-    <ul class="banner_pic">
-        <li><img src="../static/images/logo.jpeg" /></li>
-        <li><img src="../static/images/logo.jpeg" /></li>
-        <li><img src="../static/images/logo.jpeg" /></li>
-
-    </ul>
-    <a class="prev" href="javascript:void(0)"></a>
-    <a class="next" href="javascript:void(0)"></a>
-    <div class="num"><ul></ul></div>
-</div>
-<script>
-    /*鼠标移过，左右按钮显示*/
-    $(".banner_box").hover(function(){
-        $(this).find(".prev,.next").fadeTo("show",0.1);
-    },function(){
-        $(this).find(".prev,.next").hide();
-    })
-    /*鼠标移过某个按钮 高亮显示*/
-    $(".prev,.next").hover(function(){
-        $(this).fadeTo("show",0.7);
-    },function(){
-        $(this).fadeTo("show",0.1);
-    })
-    $(".banner_box").slide({ titCell:".num ul" , mainCell:".banner_pic" , effect:"fold", autoPlay:true, delayTime:700 , autoPage:true });
-</script>
-<!-- 代码 结束 -->
-<!--banner部分结束-->
-
-<!--内容开始-->
-<div class="content_box1">
-    <div class="content_box2">
-        <div class="menu_box">
-            <p class="menu_box_title">课程论坛<span>news</span></p >
-            <ul class="menu_box1">
-                <li><a href="{{ url_for('news_center') }}">课程讨论</a></li>
-                <li><a href="{{ url_for('course_discussion') }}">发布话题</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('index') }}">首页</a></li>
             </ul>
         </div>
-        <div class="content_boxL">
-            <div class="content_boxL_nav">
-                <p class="content_boxL_nav_title">发布话题</p >
-                <div class="content_boxL_nav_R">
-                    <a href="{{ url_for('index') }}">首页></a>
-                    <a href="{{ url_for('news_center') }}">课程论坛 ></a>
-                    <a href="{{ url_for('course_discussion') }}"> 发布话题</a>
-                </div>
+        <script>
+            $(".nav_1").mouseenter(function(){
+                $(this).find(".nav_slide").slideDown()
+            });
+            $(".nav_1").mouseleave(function(){
+                $(".nav_slide").slideUp()
+            });
+        </script>
+    </div>
+
+    <!-- 发布话题主体内容 -->
+    <div class="publish_container">
+        <div class="publish_card">
+            <div class="card_header">
+                <h2 class="card_title">发布新话题</h2>
+                <a href="{{ url_for('news_center') }}" class="back_link">← 返回论坛</a>
+            </div>
+            <div class="card_body">
+                <form id="publish-topic-form">
+                    <div class="form_group">
+                        <label for="topic-title">话题标题 <span class="required">*</span></label>
+                        <input type="text" id="topic-title" name="topic" placeholder="请输入话题标题" required maxlength="100" />
+                        <small class="form_hint">标题应简洁明了，能准确描述讨论内容</small>
+                    </div>
+                    <div class="form_group">
+                        <label for="topic-content">话题内容 <span class="required">*</span></label>
+                        <textarea id="topic-content" name="comments" placeholder="请输入话题内容，支持多行输入..." required rows="12"></textarea>
+                        <div class="char_count">
+                            <span id="char-count">0</span> / 2000 字
+                        </div>
+                    </div>
+                    <div class="form_actions">
+                        <button type="button" class="btn_cancel" id="cancel-btn">取消</button>
+                        <button type="submit" class="btn_submit" id="submit-btn">发布话题</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
-<form method="post">
-<div style="width:800px;margin:10px auto">
-    <table><tr><td> 话题：</td><td><input type="text" name="topic" style="width:500px" /></td></tr>
-        <tr><td>内容：</td><td><textarea  name="comments" style="width:500px;height:200px"></textarea></td></tr>
-        <tr><td></td><td><button>提交</button></td></tr>
-    </table>
-</div>
-</form>
+<script>
+$(function() {
+    // 字符计数
+    $("#topic-content").on("input", function() {
+        var length = $(this).val().length;
+        $("#char-count").text(length);
+        
+        if (length > 2000) {
+            $(this).val($(this).val().substring(0, 2000));
+            $("#char-count").text(2000);
+            showNotification("内容不能超过2000字", "warning");
+        }
+    });
+    
+    // 取消按钮
+    $("#cancel-btn").click(function() {
+        if (confirm("确定要取消发布吗？未保存的内容将丢失。")) {
+            window.location.href = "{{ url_for('news_center') }}";
+        }
+    });
+    
+    // 表单提交
+    $("#publish-topic-form").submit(function(e) {
+        e.preventDefault();
+        
+        var topic = $("#topic-title").val().trim();
+        var content = $("#topic-content").val().trim();
+        
+        // 验证
+        if (!topic) {
+            showNotification("请输入话题标题", "error");
+            $("#topic-title").focus();
+            return;
+        }
+        
+        if (topic.length > 100) {
+            showNotification("话题标题不能超过100字", "error");
+            $("#topic-title").focus();
+            return;
+        }
+        
+        if (!content) {
+            showNotification("请输入话题内容", "error");
+            $("#topic-content").focus();
+            return;
+        }
+        
+        if (content.length < 10) {
+            showNotification("话题内容至少需要10个字", "error");
+            $("#topic-content").focus();
+            return;
+        }
+        
+        // 显示加载状态
+        var submitBtn = $("#submit-btn");
+        submitBtn.prop("disabled", true).text("发布中...");
+        
+        // 提交表单（使用JSON格式）
+        $.ajax({
+            url: "{{ url_for('course_discussion') }}",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                topic: topic,
+                comments: content
+            }),
+            success: function(response) {
+                if (response.success) {
+                    // 重置按钮状态
+                    submitBtn.prop("disabled", false).text("发布话题");
+                    
+                    // 显示大型成功消息
+                    console.log("准备显示成功消息");
+                    try {
+                        showSuccessModal("话题发布成功！", "您的话题已成功发布，即将跳转到课程论坛查看。");
+                        console.log("成功消息已调用");
+                    } catch (e) {
+                        console.error("显示成功消息时出错:", e);
+                        alert("话题发布成功！即将跳转到课程论坛。");
+                        setTimeout(function() {
+                            window.location.href = "/news_center?published=success";
+                        }, 2000);
+                    }
+                    
+                    // 清空表单
+                    $("#topic-title").val("");
+                    $("#topic-content").val("");
+                    $("#char-count").text("0");
+                    formChanged = false;
+                    
+                    // 延迟跳转到论坛页面
+                    setTimeout(function() {
+                        window.location.href = "/news_center?published=success";
+                    }, 3000);
+                } else {
+                    showNotification(response.message || "发布失败，请稍后重试", "error");
+                    submitBtn.prop("disabled", false).text("发布话题");
+                }
+            },
+            error: function(xhr) {
+                var errorMsg = "发布失败，请稍后重试";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                } else if (xhr.responseText) {
+                    try {
+                        var error = JSON.parse(xhr.responseText);
+                        if (error.message) {
+                            errorMsg = error.message;
+                        }
+                    } catch(e) {
+                        // 如果不是JSON，使用默认错误信息
+                        if (xhr.status === 401) {
+                            errorMsg = "用户未登录，请先登录";
+                        } else if (xhr.status === 400) {
+                            errorMsg = "请求参数错误";
+                        }
+                    }
+                }
+                showNotification(errorMsg, "error");
+                submitBtn.prop("disabled", false).text("发布话题");
+            }
+        });
+    });
+    
+    // 显示成功模态框
+    function showSuccessModal(title, message) {
+        console.log("showSuccessModal被调用:", title, message);
+        
+        var modal = $('<div class="success_modal_overlay">' +
+            '<div class="success_modal">' +
+                '<div class="success_modal_icon">' +
+                    '<div class="success_checkmark">' +
+                        '<div class="check_icon">' +
+                            '<span class="icon_line line_tip"></span>' +
+                            '<span class="icon_line line_long"></span>' +
+                            '<div class="icon_circle"></div>' +
+                            '<div class="icon_fix"></div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="success_modal_content">' +
+                    '<h3 class="success_modal_title">' + title + '</h3>' +
+                    '<p class="success_modal_message">' + message + '</p>' +
+                    '<div class="success_modal_countdown">' +
+                        '<span id="countdown">3</span> 秒后自动跳转...' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>');
+        
+        $("body").append(modal);
+        console.log("模态框已添加到页面");
+        
+        // 显示动画
+        setTimeout(function() {
+            modal.addClass("show");
+            console.log("模态框显示动画已触发");
+        }, 10);
+        
+        // 倒计时
+        var countdown = 3;
+        var countdownInterval = setInterval(function() {
+            countdown--;
+            modal.find("#countdown").text(countdown);
+            console.log("倒计时:", countdown);
+            if (countdown <= 0) {
+                clearInterval(countdownInterval);
+            }
+        }, 1000);
+        
+        // 点击遮罩关闭（可选）
+        modal.click(function(e) {
+            if (e.target === modal[0]) {
+                modal.removeClass("show");
+                setTimeout(function() {
+                    modal.remove();
+                    clearInterval(countdownInterval);
+                }, 300);
+            }
+        });
+    }
+    
+    // 显示通知函数
+    function showNotification(message, type) {
+        type = type || "info";
+        var notification = $('<div class="notification notification-' + type + '">' + message + '</div>');
+        $("body").append(notification);
+        
+        setTimeout(function() {
+            notification.addClass("show");
+        }, 10);
+        
+        // 成功消息显示更久
+        var displayTime = type === 'success' ? 4000 : 3000;
+        
+        setTimeout(function() {
+            notification.removeClass("show");
+            setTimeout(function() {
+                notification.remove();
+            }, 400);
+        }, displayTime);
+    }
+    
+    // 页面离开前提示
+    var formChanged = false;
+    $("#topic-title, #topic-content").on("input", function() {
+        formChanged = true;
+    });
+    
+    window.addEventListener("beforeunload", function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = "您有未保存的内容，确定要离开吗？";
+        }
+    });
+});
+</script>
 
-</div>
-</div>
+<style>
+/* 发布话题容器 */
+.publish_container {
+    width: 900px;
+    margin: 30px auto;
+    min-height: 600px;
+}
 
-<!--内容结束-->
-</div>
+.publish_card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f0f0;
+    background: linear-gradient(135deg, #003d79 0%, #0056b3 100%);
+}
+
+.card_title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.back_link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    opacity: 0.9;
+    transition: opacity 0.3s;
+}
+
+.back_link:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.card_body {
+    padding: 30px;
+}
+
+.form_group {
+    margin-bottom: 24px;
+}
+
+.form_group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+}
+
+.required {
+    color: #f5222d;
+}
+
+.form_group input[type="text"],
+.form_group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+}
+
+.form_group input[type="text"]:focus,
+.form_group textarea:focus {
+    outline: none;
+    border-color: #003d79;
+    box-shadow: 0 0 0 3px rgba(0,61,121,0.1);
+}
+
+.form_group textarea {
+    resize: vertical;
+    min-height: 200px;
+    line-height: 1.6;
+}
+
+.form_hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #999;
+}
+
+.char_count {
+    text-align: right;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #999;
+}
+
+.form_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn_cancel, .btn_submit {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn_cancel {
+    background: #f5f7fa;
+    color: #666;
+}
+
+.btn_cancel:hover {
+    background: #e8eaed;
+}
+
+.btn_submit {
+    background: #003d79;
+    color: #fff;
+}
+
+.btn_submit:hover:not(:disabled) {
+    background: #0056b3;
+}
+
+.btn_submit:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 成功模态框 */
+.success_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.success_modal_overlay.show {
+    opacity: 1;
+}
+
+.success_modal {
+    background: #fff;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transform: scale(0.7);
+    transition: transform 0.3s ease;
+}
+
+.success_modal_overlay.show .success_modal {
+    transform: scale(1);
+}
+
+.success_modal_icon {
+    margin-bottom: 20px;
+}
+
+.success_checkmark {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 2;
+    stroke: #4CAF50;
+    stroke-miterlimit: 10;
+    margin: 0 auto;
+    box-shadow: inset 0px 0px 0px #4CAF50;
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    position: relative;
+}
+
+.success_checkmark .check_icon {
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 2px solid #4CAF50;
+}
+
+.success_checkmark .check_icon::before {
+    top: 3px;
+    left: -2px;
+    width: 30px;
+    transform-origin: 100% 50%;
+    border-radius: 100px 0 0 100px;
+}
+
+.success_checkmark .check_icon::after {
+    top: 0;
+    left: 30px;
+    width: 60px;
+    transform-origin: 0 50%;
+    border-radius: 0 100px 100px 0;
+    animation: rotate-circle 4.25s ease-in;
+}
+
+.success_checkmark .check_icon::before,
+.success_checkmark .check_icon::after {
+    content: '';
+    height: 100px;
+    position: absolute;
+    background: #FFFFFF;
+    transform: rotate(-45deg);
+}
+
+.success_checkmark .icon_line {
+    height: 2px;
+    background: #4CAF50;
+    display: block;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 10;
+}
+
+.success_checkmark .icon_line.line_tip {
+    top: 46px;
+    left: 14px;
+    width: 25px;
+    transform: rotate(45deg);
+    animation: icon-line-tip 0.75s;
+}
+
+.success_checkmark .icon_line.line_long {
+    top: 38px;
+    right: 8px;
+    width: 47px;
+    transform: rotate(-45deg);
+    animation: icon-line-long 0.75s;
+}
+
+.success_checkmark .icon_circle {
+    top: -2px;
+    left: -2px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #4CAF50;
+    position: absolute;
+    z-index: 10;
+    box-sizing: content-box;
+}
+
+.success_checkmark .icon_fix {
+    top: 8px;
+    width: 5px;
+    left: 26px;
+    z-index: 1;
+    height: 85px;
+    position: absolute;
+    transform: rotate(-45deg);
+    background-color: #FFFFFF;
+}
+
+@keyframes rotate-circle {
+    0% {
+        transform: rotate(-45deg);
+    }
+    5% {
+        transform: rotate(-45deg);
+    }
+    12% {
+        transform: rotate(-405deg);
+    }
+    100% {
+        transform: rotate(-405deg);
+    }
+}
+
+@keyframes icon-line-tip {
+    0% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+    54% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+    70% {
+        width: 50px;
+        left: -8px;
+        top: 37px;
+    }
+    84% {
+        width: 17px;
+        left: 21px;
+        top: 48px;
+    }
+    100% {
+        width: 25px;
+        left: 14px;
+        top: 45px;
+    }
+}
+
+@keyframes icon-line-long {
+    0% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+    }
+    65% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+    }
+    84% {
+        width: 55px;
+        right: 0px;
+        top: 35px;
+    }
+    100% {
+        width: 47px;
+        right: 8px;
+        top: 38px;
+    }
+}
+
+.success_modal_title {
+    color: #4CAF50;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.success_modal_message {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+.success_modal_countdown {
+    color: #999;
+    font-size: 14px;
+}
+
+.success_modal_countdown span {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+/* 通知样式 */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    z-index: 10001;
+    min-width: 280px;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #52c41a 0%, #73d13d 100%);
+    color: #fff;
+    border-left: 4px solid #389e0d;
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #f5222d 0%, #ff4d4f 100%);
+    color: #fff;
+    border-left: 4px solid #cf1322;
+}
+
+.notification-warning {
+    background: linear-gradient(135deg, #faad14 0%, #ffc53d 100%);
+    color: #fff;
+    border-left: 4px solid #d48806;
+}
+
+.notification-info {
+    background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+    color: #fff;
+    border-left: 4px solid #096dd9;
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+    .publish_container {
+        width: 95%;
+    }
+}
+</style>
+
 </body>
 </html>

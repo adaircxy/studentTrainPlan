@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公告详情</title>
+    <link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon"/>
+    <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}" type="text/javascript"></script>
+</head>
+<body>
+<div class="wapper_box">
+    <div class="header_box"></div>
+    <div class="header_box1">
+        <div class="header_box2">
+            <a class="logo_box" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo1.jpg') }}"/></a>
+            <ul class="nav_box">
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('recommed') }}">课程推荐</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('course_selection') }}">选课中心</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('index') }}">首页</a></li>
+            </ul>
+        </div>
+        <script>
+            $(".nav_1").mouseenter(function(){
+                $(this).find(".nav_slide").slideDown()
+            });
+            $(".nav_1").mouseleave(function(){
+                $(".nav_slide").slideUp()
+            });
+        </script>
+    </div>
+</div>
+
+<!-- 公告详情主体 -->
+<div class="announcement_detail_container">
+    <div class="detail_header">
+        <h1 class="detail_title">{{ announcement.title }}</h1>
+        <div class="detail_meta">
+            <span class="meta_item">发布单位：{{ announcement.publisher }}</span>
+            <span class="meta_item">发布时间：{{ announcement.time }}</span>
+        </div>
+    </div>
+    <div class="detail_content">
+        {{ announcement.content }}
+    </div>
+    <div class="detail_actions">
+        <a class="btn_link" href="{{ url_for('inbox') }}">← 返回公告列表</a>
+    </div>
+</div>
+
+<style>
+.announcement_detail_container {
+    width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 30px;
+}
+
+.detail_header {
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.detail_title {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+}
+
+.detail_meta {
+    display: flex;
+    gap: 20px;
+    color: #666;
+    font-size: 13px;
+}
+
+.detail_content {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.detail_actions {
+    margin-top: 24px;
+}
+
+.btn_link {
+    color: #003d79;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border: 1px solid #003d79;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn_link:hover {
+    background: #003d79;
+    color: #fff;
+}
+</style>
+</body>
+</html>
+

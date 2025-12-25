@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>论坛调试测试</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>论坛API调试测试</h1>
+    <div id="test-result"></div>
+    <button onclick="testAPI()">测试API</button>
+    
+    <script>
+    function testAPI() {
+        console.log('开始测试API...');
+        $("#test-result").html("正在测试...");
+        
+        $.ajax({
+            url: "/api/get_discussion_topics",
+            type: "GET",
+            data: {
+                page: 1,
+                sort_by: 'latest',
+                filter: 'all',
+                per_page: 10
+            },
+            timeout: 10000,
+            success: function(res) {
+                console.log('API成功响应:', res);
+                $("#test-result").html(`
+                    <h3>API测试成功!</h3>
+                    <p>返回数据: ${JSON.stringify(res, null, 2)}</p>
+                `);
+            },
+            error: function(xhr, status, error) {
+                console.log('API错误:', {xhr: xhr, status: status, error: error});
+                $("#test-result").html(`
+                    <h3>API测试失败!</h3>
+                    <p>状态: ${xhr.status}</p>
+                    <p>错误: ${error}</p>
+                    <p>响应: ${xhr.responseText}</p>
+                `);
+            }
+        });
+    }
+    
+    // 页面加载时自动测试
+    $(function() {
+        console.log('页面加载完成，开始自动测试...');
+        testAPI();
+    });
+    </script>
+</body>
+</html>

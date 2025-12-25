@@ -5,9 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link href="../static/css/style1.css" rel="stylesheet" type="text/css" />
         <link rel="icon" href="../static/images/logo.ico" type="image/x-icon"/>
-		<script src="../static/js/jquery1.42.min.js" type="text/javascript"></script>
-		<script src="../static/js/jquery.js"></script>
-		<script src="../static/js/jquery.superslide.2.1.1.js" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/jquery1.42.min.js') }}" type="text/javascript"></script>
+	<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
 		<title>个人中心</title>
 	</head>
 
@@ -16,16 +15,15 @@
 			<div class="header_box"></div>
 			<div class="header_box1">
 				<div class="header_box2">
-					<a class="logo_box" href="{{ url_for('index') }}"><img src="../static/images/logo1.jpg" /></a>
+				<a class="logo_box" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo1.jpg') }}"/></a>
 					<ul class="nav_box">
 						<li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
-                        <!--251201，用户中心建设完成-->
             			<li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
 						<li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
                				<div class="nav_slide">
                 				<div class="nav_slide1">
-                    				<a href="">课程公告<span><img src="../static/images/siade_bg1.png"/></span></a>
-                    				<a href="">课程讨论<span><img src="../static/images/siade_bg1.png"/></span></a>
+								<a href="{{ url_for('news_center') }}">课程公告<span><img src="../static/images/siade_bg1.png"/></span></a>
+								<a href="{{ url_for('course_discussion') }}">课程讨论<span><img src="../static/images/siade_bg1.png"/></span></a>
                  				</div>
                				</div>  
              			</li>
@@ -39,97 +37,1652 @@
 					$(".nav_1").mouseenter(function() {
 						$(this).find(".nav_slide").slideDown()
 					});
-
 					$(".nav_1").mouseleave(function() {
 						$(".nav_slide").slideUp()
 					});
-					//$(".producys_box").mouseout(function(){
-					// $(this).find(".producys_box1").slideUp(); 
-					//});
 				</script>
 			</div>
-			<!--banner部分开始-->
-			<div class="banner_box">
-				<ul class="banner_pic">
-					<li><img src="../static/images/logo.jpeg" /></li>
-					<li><img src="../static/images/logo.jpeg" /></li>
-					<li><img src="../static/images/logo.jpeg" /></li>
 
-				</ul>
-				<a class="prev" href="javascript:void(0)"></a>
-				<a class="next" href="javascript:void(0)"></a>
-				<div class="num">
-					<ul></ul>
+		<!-- 个人中心主体内容 -->
+		<div class="personal_center_container">
+			<!-- 左侧导航栏 -->
+			<div class="personal_sidebar">
+				<!-- 头像区域 -->
+				<div class="avatar_section">
+					<div class="avatar_wrapper">
+						<img id="user-avatar" src="{{ url_for('static', filename='images/personal.jpg') }}" alt="头像" />
+						<div class="avatar_edit_icon">📷</div>
 				</div>
+					<div id="sidebar-user-name" class="sidebar_user_name">{{ result[0][0] if result else '加载中...' }}</div>
+					<div id="sidebar-user-id" class="sidebar_user_id">学号：{{ result[0][2] if result else '加载中...' }}</div>
 			</div>
-			<script>
-				/*鼠标移过，左右按钮显示*/
-				$(".banner_box").hover(function() {
-					$(this).find(".prev,.next").fadeTo("show", 0.1);
-				}, function() {
-					$(this).find(".prev,.next").hide();
-				})
-				/*鼠标移过某个按钮 高亮显示*/
-				$(".prev,.next").hover(function() {
-					$(this).fadeTo("show", 0.7);
-				}, function() {
-					$(this).fadeTo("show", 0.1);
-				})
-				$(".banner_box").slide({
-					titCell: ".num ul",
-					mainCell: ".banner_pic",
-					effect: "fold",
-					autoPlay: true,
-					delayTime: 700,
-					autoPage: true
-				});
-			</script>
-			<!-- 代码 结束 -->
-			<!--banner部分结束-->
-
-			<!--内容开始-->
-			<div class="content_box1">
-				<div class="content_box2">
-					<div class="menu_box">
-						<p class="menu_box_title">个人中心<span>Personal</span></p>
-						<ul class="menu_box1">
-							<li>
-								<a href="">个人中心</a>
+				
+				<!-- 菜单列表 -->
+				<ul class="sidebar_menu">
+					<li class="menu_item {% if section == 'personal_info' or not section %}active{% endif %}">
+						<a href="{{ url_for('personal_information', section='personal_info') }}">
+							<span class="menu_icon">👤</span>
+							<span class="menu_text">个人信息</span>
+						</a>
+					</li>
+					<li class="menu_item {% if section == 'account_security' %}active{% endif %}">
+						<a href="{{ url_for('personal_information', section='account_security') }}">
+							<span class="menu_icon">🔒</span>
+							<span class="menu_text">账号安全</span>
+						</a>
+					</li>
+					<li class="menu_item {% if section == 'course_records' %}active{% endif %}">
+						<a href="{{ url_for('personal_information', section='course_records') }}">
+							<span class="menu_icon">📋</span>
+							<span class="menu_text">课程记录</span>
+						</a>
+					</li>
+					<li class="menu_item">
+						<a href="{{ url_for('inbox') }}">
+							<span class="menu_icon">💬</span>
+							<span class="menu_text">消息中心</span>
+						</a>
+					</li>
+					<li class="menu_item {% if section == 'settings' %}active{% endif %}">
+						<a href="{{ url_for('personal_information', section='settings') }}">
+							<span class="menu_icon">⚙️</span>
+							<span class="menu_text">系统设置</span>
+						</a>
 							</li>
 						</ul>
 					</div>
-					<div class="content_boxL">
-						<div class="content_boxL_nav">
-							<p class="content_boxL_nav_title">个人信息</p>
-							<div class="content_boxL_nav_R">
-								<a href="">首页 ></a>
-								<a href="">个人中心 ></a>
-								<a href=""> 个人信息</a>
-							</div>
-						</div>
-						<div class="personal">
-							<p>姓名：<font color="#4169E1">{{ result[0][0] }}</font></p>
-							<p>学号：<font color="#4169E1">{{ result[0][2] }}</font></p>
-							<p>学院：<font color="#4169E1">{{ result[0][3] }}</font></p>
-							<p>专业：<font color="#4169E1">{{ result[0][4] }}</font></p>
 
-							<div class="content">
-								<span class="follow-us">
-					                <a href="https://user.qzone.qq.com"><img src="../static/images/qq.jpg" style="height: 300px;width: 300px"></a>
-					                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                    <a href="https://www.sina.com.cn/"><img src="../static/images/xl.jpg" style="height: 300px;width: 300px"></a>
-					                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                    <a href="https://github.com/"><img src="../static/images/github.jpg" style="height: 300px;width: 300px"></a>
-					                <a href="#"><i class="fa fa-linkedin"></i></a>
-           						</span>
+			<!-- 右侧内容区 -->
+			<div class="personal_content">
+				{% if section == 'personal_info' or not section %}
+				<!-- 个人信息卡片 -->
+				<div class="info_card">
+					<div class="card_header">
+						<h2 class="card_title">个人信息</h2>
+						<button class="edit_btn" id="edit-info-btn">编辑资料</button>
 							</div>
+					<div class="card_body">
+						<div class="info_avatar_section">
+							<img id="info-avatar" src="{{ url_for('static', filename='images/personal.jpg') }}" alt="头像" />
+							<button class="change_avatar_btn">更换头像</button>
 						</div>
-						
+						<div class="info_details">
+							<div class="info_row">
+								<div class="info_item">
+									<span class="info_label">姓名</span>
+									<span id="info-name" class="info_value">{{ result[0][0] if result else '加载中...' }}</span>
+								</div>
+								<div class="info_item">
+									<span class="info_label">学号</span>
+									<span id="info-stu-no" class="info_value">{{ result[0][2] if result else '加载中...' }}</span>
+								</div>
+							</div>
+							<div class="info_row">
+								<div class="info_item">
+									<span class="info_label">学院</span>
+									<span id="info-college" class="info_value">{{ result[0][3] if result else '加载中...' }}</span>
+								</div>
+								<div class="info_item">
+									<span class="info_label">专业</span>
+									<span id="info-major" class="info_value">{{ result[0][4] if result else '加载中...' }}</span>
+								</div>
+							</div>
+							<div class="info_row">
+								<div class="info_item">
+									<span class="info_label">年级</span>
+									<span id="info-grade" class="info_value">{{ result[0][5] if result else '加载中...' }}</span>
+								</div>
+								<div class="info_item">
+									<span class="info_label">性别</span>
+									<span id="info-sex" class="info_value">{{ result[0][1] if result else '加载中...' }}</span>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-				<!--内容结束-->
-				
+
+				<!-- 学习状态概览区 -->
+				<div class="learning_status_card">
+					<div class="card_header">
+						<h2 class="card_title">学习状态概览</h2>
+					</div>
+					<div class="card_body">
+						<div id="learning-statistics" class="statistics_grid">
+							<div class="loading">加载中...</div>
+						</div>
+							</div>
+						</div>
+						
+				<!-- 系统功能提示区 -->
+				<div class="system_notices_card">
+					<div class="card_header">
+						<h2 class="card_title">系统提醒</h2>
+						</div>
+					<div class="card_body">
+						<div id="system-notices" class="notices_list">
+							<div class="loading">加载中...</div>
+					</div>
+				</div>
+				</div>
+				{% elif section == 'account_security' %}
+				<!-- 账号安全页面 -->
+				<div class="info_card">
+					<div class="card_header">
+						<h2 class="card_title">账号安全</h2>
+					</div>
+					<div class="card_body">
+						<div class="security_section">
+							<h3 class="section_subtitle">修改密码</h3>
+							<form id="change-password-form" class="security_form">
+								<div class="form_group">
+									<label for="old-password">原密码</label>
+									<input type="password" id="old-password" name="old_password" required />
+								</div>
+								<div class="form_group">
+									<label for="new-password">新密码</label>
+									<input type="password" id="new-password" name="new_password" required minlength="6" />
+									<small class="form_hint">密码长度至少6位</small>
+								</div>
+								<div class="form_group">
+									<label for="confirm-password">确认新密码</label>
+									<input type="password" id="confirm-password" name="confirm_password" required minlength="6" />
+								</div>
+								<div class="form_actions">
+									<button type="submit" class="btn_submit">修改密码</button>
+								</div>
+							</form>
+						</div>
+						<div class="security_section">
+							<h3 class="section_subtitle">安全设置</h3>
+							<div class="security_item">
+								<div class="security_info">
+									<div class="security_label">登录保护</div>
+									<div class="security_desc">已开启，保护您的账号安全</div>
+								</div>
+								<label class="switch">
+									<input type="checkbox" checked disabled>
+									<span class="slider"></span>
+								</label>
+							</div>
+							<div class="security_item">
+								<div class="security_info">
+									<div class="security_label">账号状态</div>
+									<div class="security_desc">账号正常，无异常登录记录</div>
+								</div>
+								<span class="status_badge status_success">正常</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% elif section == 'course_records' %}
+				<!-- 课程记录页面 -->
+				<div class="info_card">
+					<div class="card_header">
+						<h2 class="card_title">课程记录</h2>
+					</div>
+					<div class="card_body">
+						<div id="course-records-content">
+							<div class="loading">加载中...</div>
+						</div>
+					</div>
+				</div>
+				{% elif section == 'settings' %}
+				<!-- 系统设置页面 -->
+				<div class="info_card">
+					<div class="card_header">
+						<h2 class="card_title">系统设置</h2>
+					</div>
+					<div class="card_body">
+						<div class="settings_section">
+							<h3 class="section_subtitle">通知设置</h3>
+							<div class="setting_item">
+								<div class="setting_info">
+									<div class="setting_label">课程提醒</div>
+									<div class="setting_desc">接收课程相关通知</div>
+								</div>
+								<label class="switch">
+									<input type="checkbox" id="course-notify" checked>
+									<span class="slider"></span>
+								</label>
+							</div>
+							<div class="setting_item">
+								<div class="setting_info">
+									<div class="setting_label">系统公告</div>
+									<div class="setting_desc">接收系统公告和重要通知</div>
+								</div>
+								<label class="switch">
+									<input type="checkbox" id="system-notify" checked>
+									<span class="slider"></span>
+								</label>
+							</div>
+						</div>
+						<div class="settings_section">
+							<h3 class="section_subtitle">显示设置</h3>
+							<div class="setting_item">
+								<div class="setting_info">
+									<div class="setting_label">主题模式</div>
+									<div class="setting_desc">选择界面显示模式</div>
+								</div>
+								<select id="theme-select" class="setting_select">
+									<option value="light">浅色模式</option>
+									<option value="dark">深色模式</option>
+									<option value="auto">跟随系统</option>
+								</select>
+							</div>
+							<div class="setting_item">
+								<div class="setting_info">
+									<div class="setting_label">语言设置</div>
+									<div class="setting_desc">选择界面语言</div>
+								</div>
+								<select id="language-select" class="setting_select">
+									<option value="zh">简体中文</option>
+									<option value="en">English</option>
+								</select>
+							</div>
+						</div>
+						<div class="settings_section">
+							<h3 class="section_subtitle">其他设置</h3>
+							<div class="setting_item">
+								<div class="setting_info">
+									<div class="setting_label">自动保存</div>
+									<div class="setting_desc">自动保存您的操作记录</div>
+								</div>
+								<label class="switch">
+									<input type="checkbox" id="auto-save" checked>
+									<span class="slider"></span>
+								</label>
+							</div>
+						</div>
+						<div class="settings_actions">
+							<button class="btn_submit" id="save-settings-btn">保存设置</button>
+							<button class="btn_cancel" id="reset-settings-btn">恢复默认</button>
+						</div>
+					</div>
+				</div>
+				{% endif %}
 			</div>
+		</div>
+	</div>
+
+	<!-- 编辑个人信息模态框 -->
+	<div id="edit-modal" class="modal">
+		<div class="modal_content">
+			<div class="modal_header">
+				<h3>编辑个人信息</h3>
+				<span class="modal_close">&times;</span>
+			</div>
+			<div class="modal_body">
+				<form id="edit-info-form">
+					<div class="form_group">
+						<label for="edit-name">姓名</label>
+						<input type="text" id="edit-name" name="name" required />
+					</div>
+					<div class="form_group">
+						<label for="edit-sex">性别</label>
+						<select id="edit-sex" name="sex" required>
+							<option value="男">男</option>
+							<option value="女">女</option>
+						</select>
+					</div>
+					<div class="form_group">
+						<label for="edit-college">学院</label>
+						<input type="text" id="edit-college" name="college" required />
+					</div>
+					<div class="form_group">
+						<label for="edit-major">专业</label>
+						<input type="text" id="edit-major" name="major" required />
+					</div>
+					<div class="form_group">
+						<label>学号</label>
+						<input type="text" value="{{ result[0][2] if result else '' }}" disabled />
+						<small class="form_hint">学号不可修改</small>
+					</div>
+				</form>
+			</div>
+			<div class="modal_footer">
+				<button type="button" class="btn_cancel" id="cancel-edit-btn">取消</button>
+				<button type="button" class="btn_submit" id="submit-edit-btn">保存</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- 头像上传模态框 -->
+	<div id="avatar-modal" class="modal">
+		<div class="modal_content modal_small">
+			<div class="modal_header">
+				<h3>更换头像</h3>
+				<span class="modal_close">&times;</span>
+			</div>
+			<div class="modal_body">
+				<div class="avatar_upload_area">
+					<div id="avatar-preview" class="avatar_preview">
+						<img id="preview-img" src="{{ url_for('static', filename='images/personal.jpg') }}" alt="预览" />
+					</div>
+					<div class="upload_actions">
+						<label for="avatar-input" class="btn_upload">选择图片</label>
+						<input type="file" id="avatar-input" accept="image/*" style="display: none;" />
+						<button type="button" class="btn_submit" id="upload-avatar-btn" disabled>上传</button>
+					</div>
+					<small class="upload_hint">支持 JPG、PNG、GIF 格式，文件大小不超过 2MB</small>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function() {
+			// 加载学习统计数据
+			function loadLearningStatistics() {
+				$.ajax({
+					url: "/api/get_learning_statistics",
+					type: "GET",
+					success: function(res) {
+						if (res.success && res.data) {
+							let data = res.data;
+							let html = `
+								<div class="stat_item">
+									<div class="stat_icon">📚</div>
+									<div class="stat_content">
+										<div class="stat_value">${data.current_semester_courses || 0}</div>
+										<div class="stat_label">本学期课程数</div>
+									</div>
+								</div>
+								<div class="stat_item">
+									<div class="stat_icon">🎓</div>
+									<div class="stat_content">
+										<div class="stat_value">${data.finished_credits || 0}</div>
+										<div class="stat_label">已修学分</div>
+									</div>
+								</div>
+								<div class="stat_item">
+									<div class="stat_icon">⏳</div>
+									<div class="stat_content">
+										<div class="stat_value">${data.unfinished_courses || 0}</div>
+										<div class="stat_label">未完成课程</div>
+									</div>
+								</div>
+								<div class="stat_item progress_item">
+									<div class="stat_icon">📊</div>
+									<div class="stat_content">
+										<div class="progress_info">
+											<span class="progress_label">课程进度</span>
+											<span class="progress_percentage">${data.total_progress || 0}%</span>
+										</div>
+										<div class="progress_bar_container">
+											<div class="progress_bar" style="width: ${data.total_progress || 0}%"></div>
+										</div>
+									</div>
+								</div>
+							`;
+							$("#learning-statistics").html(html);
+						} else {
+							$("#learning-statistics").html('<div class="error">加载失败，请刷新重试</div>');
+						}
+					},
+					error: function() {
+						$("#learning-statistics").html('<div class="error">加载失败，请刷新重试</div>');
+					}
+				});
+			}
+
+			// 加载系统提醒
+			function loadSystemNotices() {
+				$.ajax({
+					url: "/api/get_system_notices",
+					type: "GET",
+					success: function(res) {
+						if (res.success && res.data) {
+							let notices = res.data;
+							let html = '';
+							
+							notices.forEach(function(notice) {
+								html += `
+									<div class="notice_item notice_${notice.type}">
+										<div class="notice_icon">${notice.icon}</div>
+										<div class="notice_content">
+											<div class="notice_title">${notice.title}</div>
+											<div class="notice_message">${notice.message}</div>
+										</div>
+										${notice.action ? `<a href="${notice.action_url}" class="notice_action">${notice.action}</a>` : ''}
+									</div>
+								`;
+							});
+							
+							$("#system-notices").html(html);
+						} else {
+							$("#system-notices").html('<div class="error">加载失败，请刷新重试</div>');
+						}
+					},
+					error: function() {
+						$("#system-notices").html('<div class="error">加载失败，请刷新重试</div>');
+					}
+				});
+			}
+
+			// 更新侧边栏用户信息
+			function updateSidebarInfo() {
+				// 直接从页面数据获取
+				var stuNo = $("#info-stu-no").text();
+				var name = $("#info-name").text();
+				if (name && name !== '加载中...') {
+					$("#sidebar-user-name").text(name);
+				}
+				if (stuNo && stuNo !== '加载中...') {
+					$("#sidebar-user-id").text('学号：' + stuNo);
+				}
+			}
+
+			// 编辑按钮点击事件
+			$("#edit-info-btn").click(function() {
+				// 填充当前数据到表单
+				$("#edit-name").val($("#info-name").text());
+				$("#edit-sex").val($("#info-sex").text());
+				$("#edit-college").val($("#info-college").text());
+				$("#edit-major").val($("#info-major").text());
+				$("#edit-modal").fadeIn(200);
+			});
+
+			// 更换头像按钮
+			$(".change_avatar_btn, .avatar_edit_icon").click(function() {
+				$("#avatar-modal").fadeIn(200);
+			});
+
+			// 关闭模态框
+			$(".modal_close, .btn_cancel").click(function() {
+				$(".modal").fadeOut(200);
+				// 重置头像预览
+				$("#preview-img").attr("src", $("#info-avatar").attr("src"));
+				$("#avatar-input").val("");
+				$("#upload-avatar-btn").prop("disabled", true);
+			});
+
+			// 点击模态框外部关闭
+			$(".modal").click(function(e) {
+				if ($(e.target).hasClass("modal")) {
+					$(this).fadeOut(200);
+				}
+			});
+
+			// 提交编辑表单
+			$("#submit-edit-btn").click(function() {
+				var formData = {
+					name: $("#edit-name").val().trim(),
+					sex: $("#edit-sex").val(),
+					college: $("#edit-college").val().trim(),
+					major: $("#edit-major").val().trim()
+				};
+
+				// 表单验证
+				var errors = [];
+				if (!formData.name) errors.push("姓名不能为空");
+				if (!formData.college) errors.push("学院不能为空");
+				if (!formData.major) errors.push("专业不能为空");
+				
+				if (errors.length > 0) {
+					alert(errors.join("\n"));
+					return;
+				}
+
+				// 检查是否有变化
+				var hasChange = formData.name !== $("#info-name").text() ||
+				               formData.sex !== $("#info-sex").text() ||
+				               formData.college !== $("#info-college").text() ||
+				               formData.major !== $("#info-major").text();
+				
+				if (!hasChange) {
+					alert("没有修改任何信息");
+					return;
+				}
+
+				// 显示加载状态
+				$("#submit-edit-btn").prop("disabled", true).text("保存中...");
+
+				$.ajax({
+					url: "/api/update_personal_info",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify(formData),
+					success: function(res) {
+						if (res.success) {
+							// 更新页面显示
+							$("#info-name").text(formData.name);
+							$("#info-sex").text(formData.sex);
+							$("#info-college").text(formData.college);
+							$("#info-major").text(formData.major);
+							
+							// 更新侧边栏
+							$("#sidebar-user-name").text(formData.name);
+							
+							// 关闭模态框
+							$("#edit-modal").fadeOut(200);
+							
+							// 显示成功提示（可以使用更好的提示组件）
+							showNotification("个人信息更新成功！", "success");
+						} else {
+							alert("更新失败：" + res.message);
+						}
+					},
+					error: function(xhr) {
+						var errorMsg = "更新失败，请稍后重试";
+						if (xhr.responseJSON && xhr.responseJSON.message) {
+							errorMsg = xhr.responseJSON.message;
+						}
+						alert(errorMsg);
+					},
+					complete: function() {
+						$("#submit-edit-btn").prop("disabled", false).text("保存");
+					}
+				});
+			});
+
+			// 头像预览
+			$("#avatar-input").change(function(e) {
+				var file = e.target.files[0];
+				if (file) {
+					// 检查文件大小（2MB）
+					if (file.size > 2 * 1024 * 1024) {
+						alert("文件大小不能超过 2MB");
+						$(this).val("");
+						return;
+					}
+
+					// 检查文件类型
+					if (!file.type.match('image.*')) {
+						alert("请选择图片文件");
+						$(this).val("");
+						return;
+					}
+
+					// 预览图片
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						$("#preview-img").attr("src", e.target.result);
+						$("#upload-avatar-btn").prop("disabled", false);
+					};
+					reader.readAsDataURL(file);
+				}
+			});
+
+			// 上传头像
+			$("#upload-avatar-btn").click(function() {
+				var fileInput = $("#avatar-input")[0];
+				if (!fileInput.files || !fileInput.files[0]) {
+					alert("请先选择图片");
+					return;
+				}
+
+				var formData = new FormData();
+				formData.append('avatar', fileInput.files[0]);
+
+				// 显示加载状态
+				$("#upload-avatar-btn").prop("disabled", true).text("上传中...");
+
+				$.ajax({
+					url: "/api/upload_avatar",
+					type: "POST",
+					data: formData,
+					processData: false,
+					contentType: false,
+					success: function(res) {
+						if (res.success) {
+							// 更新所有头像显示
+							var newAvatarUrl = res.avatar_url;
+							$("#user-avatar, #info-avatar").attr("src", newAvatarUrl);
+							$("#preview-img").attr("src", newAvatarUrl);
+							
+							// 关闭模态框
+							$("#avatar-modal").fadeOut(200);
+							$("#avatar-input").val("");
+							$("#upload-avatar-btn").prop("disabled", true);
+							
+							// 显示成功提示
+							showNotification("头像上传成功！", "success");
+						} else {
+							alert("上传失败：" + res.message);
+						}
+					},
+					error: function(xhr) {
+						var errorMsg = "上传失败，请稍后重试";
+						if (xhr.responseJSON && xhr.responseJSON.message) {
+							errorMsg = xhr.responseJSON.message;
+						}
+						alert(errorMsg);
+					},
+					complete: function() {
+						$("#upload-avatar-btn").prop("disabled", false).text("上传");
+					}
+				});
+			});
+
+			// 加载课程记录
+			function loadCourseRecords() {
+				$.ajax({
+					url: "/api/get_course_records",
+					type: "GET",
+					success: function(res) {
+						if (res.success && res.data) {
+							let records = res.data;
+							let html = '';
+							
+							if (records.length > 0) {
+								html = '<table class="course_records_table"><thead><tr><th>课程编号</th><th>课程名称</th><th>分类</th><th>学分</th><th>授课教师</th><th>成绩</th><th>评价</th><th>时间</th></tr></thead><tbody>';
+								
+								records.forEach(function(record) {
+									html += `
+										<tr>
+											<td>${record.co_no}</td>
+											<td>${record.co_name}</td>
+											<td>${record.classification || '未分类'}</td>
+											<td>${record.credits}</td>
+											<td>${record.teacher}</td>
+											<td><span class="grade_badge ${record.grade === '未评分' ? 'grade_pending' : 'grade_complete'}">${record.grade}</span></td>
+											<td>${record.comment}</td>
+											<td>${record.start_time || '未知'}</td>
+										</tr>
+									`;
+								});
+								
+								html += '</tbody></table>';
+							} else {
+								html = '<div class="empty_state">暂无课程记录</div>';
+							}
+							
+							$("#course-records-content").html(html);
+						} else {
+							$("#course-records-content").html('<div class="error">加载失败，请刷新重试</div>');
+						}
+					},
+					error: function() {
+						$("#course-records-content").html('<div class="error">加载失败，请刷新重试</div>');
+					}
+				});
+			}
+
+			// 修改密码表单提交
+			$("#change-password-form").submit(function(e) {
+				e.preventDefault();
+				
+				var oldPassword = $("#old-password").val();
+				var newPassword = $("#new-password").val();
+				var confirmPassword = $("#confirm-password").val();
+				
+				// 验证
+				if (newPassword !== confirmPassword) {
+					showNotification("两次输入的新密码不一致", "error");
+					return;
+				}
+				
+				if (newPassword.length < 6) {
+					showNotification("新密码长度至少6位", "error");
+					return;
+				}
+				
+				// 显示加载状态
+				var submitBtn = $(this).find("button[type='submit']");
+				submitBtn.prop("disabled", true).text("修改中...");
+				
+				$.ajax({
+					url: "/api/change_password",
+					type: "POST",
+					contentType: "application/json",
+					data: JSON.stringify({
+						old_password: oldPassword,
+						new_password: newPassword,
+						confirm_password: confirmPassword
+					}),
+					success: function(res) {
+						if (res.success) {
+							showNotification("密码修改成功", "success");
+							$("#change-password-form")[0].reset();
+						} else {
+							showNotification(res.message || "修改失败", "error");
+						}
+					},
+					error: function(xhr) {
+						var errorMsg = "修改失败，请稍后重试";
+						if (xhr.responseJSON && xhr.responseJSON.message) {
+							errorMsg = xhr.responseJSON.message;
+						}
+						showNotification(errorMsg, "error");
+					},
+					complete: function() {
+						submitBtn.prop("disabled", false).text("修改密码");
+					}
+				});
+			});
+
+			// 保存系统设置
+			$("#save-settings-btn").click(function() {
+				var settings = {
+					course_notify: $("#course-notify").is(":checked"),
+					system_notify: $("#system-notify").is(":checked"),
+					theme: $("#theme-select").val(),
+					language: $("#language-select").val(),
+					auto_save: $("#auto-save").is(":checked")
+				};
+				
+				// 保存到本地存储
+				localStorage.setItem('user_settings', JSON.stringify(settings));
+				showNotification("设置已保存", "success");
+			});
+
+			// 恢复默认设置
+			$("#reset-settings-btn").click(function() {
+				if (confirm("确定要恢复默认设置吗？")) {
+					$("#course-notify, #system-notify, #auto-save").prop("checked", true);
+					$("#theme-select").val("light");
+					$("#language-select").val("zh");
+					localStorage.removeItem('user_settings');
+					showNotification("已恢复默认设置", "success");
+				}
+			});
+
+			// 加载保存的设置
+			var savedSettings = localStorage.getItem('user_settings');
+			if (savedSettings) {
+				try {
+					var settings = JSON.parse(savedSettings);
+					$("#course-notify").prop("checked", settings.course_notify !== false);
+					$("#system-notify").prop("checked", settings.system_notify !== false);
+					$("#auto-save").prop("checked", settings.auto_save !== false);
+					if (settings.theme) $("#theme-select").val(settings.theme);
+					if (settings.language) $("#language-select").val(settings.language);
+				} catch(e) {
+					console.error("加载设置失败", e);
+				}
+			}
+
+			// 如果当前是课程记录页面，加载数据
+			{% if section == 'course_records' %}
+			loadCourseRecords();
+			{% endif %}
+
+			// 显示通知函数
+			function showNotification(message, type) {
+				type = type || "info";
+				var notification = $('<div class="notification notification-' + type + '">' + message + '</div>');
+				$("body").append(notification);
+				
+				setTimeout(function() {
+					notification.addClass("show");
+				}, 10);
+				
+				setTimeout(function() {
+					notification.removeClass("show");
+					setTimeout(function() {
+						notification.remove();
+					}, 300);
+				}, 3000);
+			}
+
+			// 页面加载时获取数据
+			loadLearningStatistics();
+			loadSystemNotices();
+			// 延迟更新侧边栏信息，确保页面数据已加载
+			setTimeout(updateSidebarInfo, 100);
+		});
+	</script>
+
+	<style>
+		/* 个人中心容器 */
+		.personal_center_container {
+			width: 1200px;
+			margin: 30px auto;
+			display: flex;
+			gap: 20px;
+			min-height: 600px;
+		}
+
+		/* 左侧导航栏 */
+		.personal_sidebar {
+			width: 240px;
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			padding: 20px 0;
+		}
+
+		/* 头像区域 */
+		.avatar_section {
+			padding: 20px;
+			text-align: center;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.avatar_wrapper {
+			position: relative;
+			display: inline-block;
+			margin-bottom: 15px;
+		}
+
+		.avatar_wrapper img {
+			width: 100px;
+			height: 100px;
+			border-radius: 50%;
+			border: 3px solid #003d79;
+			object-fit: cover;
+		}
+
+		.avatar_edit_icon {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			width: 32px;
+			height: 32px;
+			background: #003d79;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		.sidebar_user_name {
+			font-size: 18px;
+			font-weight: bold;
+			color: #333;
+			margin-bottom: 5px;
+		}
+
+		.sidebar_user_id {
+			font-size: 14px;
+			color: #666;
+		}
+
+		/* 菜单列表 */
+		.sidebar_menu {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+		}
+
+		.menu_item {
+			margin: 0;
+		}
+
+		.menu_item a {
+			display: flex;
+			align-items: center;
+			padding: 15px 20px;
+			color: #666;
+			text-decoration: none;
+			transition: all 0.3s;
+			border-left: 3px solid transparent;
+		}
+
+		.menu_item a:hover {
+			background: #f5f7fa;
+			color: #003d79;
+		}
+
+		.menu_item.active a {
+			background: #f0f4ff;
+			color: #003d79;
+			border-left-color: #003d79;
+			font-weight: 500;
+		}
+
+		.menu_icon {
+			font-size: 20px;
+			margin-right: 12px;
+			width: 24px;
+			text-align: center;
+		}
+
+		.menu_text {
+			font-size: 15px;
+		}
+
+		/* 右侧内容区 */
+		.personal_content {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		/* 卡片通用样式 */
+		.info_card, .learning_status_card, .system_notices_card {
+			background: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+			overflow: hidden;
+		}
+
+		.card_header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 24px;
+			border-bottom: 1px solid #f0f0f0;
+			background: linear-gradient(135deg, #003d79 0%, #0056b3 100%);
+		}
+
+		.card_title {
+			font-size: 18px;
+			font-weight: 600;
+			color: #fff;
+			margin: 0;
+		}
+
+		.edit_btn {
+			background: rgba(255,255,255,0.2);
+			color: #fff;
+			border: 1px solid rgba(255,255,255,0.3);
+			padding: 6px 16px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.3s;
+		}
+
+		.edit_btn:hover {
+			background: rgba(255,255,255,0.3);
+		}
+
+		.card_body {
+			padding: 24px;
+		}
+
+		/* 个人信息卡片 */
+		.info_avatar_section {
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.info_avatar_section img {
+			width: 120px;
+			height: 120px;
+			border-radius: 50%;
+			border: 4px solid #003d79;
+			object-fit: cover;
+			margin-bottom: 15px;
+		}
+
+		.change_avatar_btn {
+			background: #f5f7fa;
+			color: #003d79;
+			border: 1px solid #d0d7de;
+			padding: 8px 20px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: all 0.3s;
+		}
+
+		.change_avatar_btn:hover {
+			background: #e8f0fe;
+			border-color: #003d79;
+		}
+
+		.info_details {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
+
+		.info_row {
+			display: flex;
+			gap: 30px;
+		}
+
+		.info_item {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			padding: 15px;
+			background: #f9fafb;
+			border-radius: 6px;
+			border-left: 4px solid #003d79;
+		}
+
+		.info_label {
+			font-size: 14px;
+			color: #666;
+			width: 80px;
+			font-weight: 500;
+		}
+
+		.info_value {
+			font-size: 15px;
+			color: #333;
+			font-weight: 500;
+		}
+
+		/* 学习状态概览 */
+		.statistics_grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+		}
+
+		.stat_item {
+			display: flex;
+			align-items: center;
+			padding: 20px;
+			background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+			border-radius: 8px;
+			border: 1px solid #e8eaed;
+			transition: all 0.3s;
+		}
+
+		.stat_item:hover {
+			box-shadow: 0 4px 12px rgba(0,61,121,0.1);
+			transform: translateY(-2px);
+		}
+
+		.stat_icon {
+			font-size: 36px;
+			margin-right: 15px;
+		}
+
+		.stat_content {
+			flex: 1;
+		}
+
+		.stat_value {
+			font-size: 28px;
+			font-weight: bold;
+			color: #003d79;
+			margin-bottom: 5px;
+		}
+
+		.stat_label {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.progress_item {
+			grid-column: 1 / -1;
+		}
+
+		.progress_info {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 10px;
+		}
+
+		.progress_label {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.progress_percentage {
+			font-size: 18px;
+			font-weight: bold;
+			color: #003d79;
+		}
+
+		.progress_bar_container {
+			width: 100%;
+			height: 12px;
+			background: #e8eaed;
+			border-radius: 6px;
+			overflow: hidden;
+		}
+
+		.progress_bar {
+			height: 100%;
+			background: linear-gradient(90deg, #003d79, #0056b3);
+			border-radius: 6px;
+			transition: width 0.5s ease;
+		}
+
+		/* 系统提醒 */
+		.notices_list {
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+		}
+
+		.notice_item {
+			display: flex;
+			align-items: center;
+			padding: 18px;
+			border-radius: 8px;
+			border-left: 4px solid;
+			transition: all 0.3s;
+		}
+
+		.notice_warning {
+			background: #fff7e6;
+			border-left-color: #faad14;
+		}
+
+		.notice_info {
+			background: #e6f7ff;
+			border-left-color: #1890ff;
+		}
+
+		.notice_tip {
+			background: #f6ffed;
+			border-left-color: #52c41a;
+		}
+
+		.notice_success {
+			background: #f6ffed;
+			border-left-color: #52c41a;
+		}
+
+		.notice_icon {
+			font-size: 24px;
+			margin-right: 15px;
+		}
+
+		.notice_content {
+			flex: 1;
+		}
+
+		.notice_title {
+			font-size: 16px;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 5px;
+		}
+
+		.notice_message {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.notice_action {
+			padding: 6px 16px;
+			background: #003d79;
+			color: #fff;
+			border-radius: 4px;
+			text-decoration: none;
+			font-size: 14px;
+			transition: all 0.3s;
+		}
+
+		.notice_action:hover {
+			background: #0056b3;
+		}
+
+		.loading, .error {
+			text-align: center;
+			padding: 40px 0;
+			color: #999;
+		}
+
+		.error {
+			color: #f56c6c;
+		}
+
+		/* 模态框样式 */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 10000;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0,0,0,0.5);
+			backdrop-filter: blur(2px);
+		}
+
+		.modal_content {
+			background-color: #fff;
+			margin: 5% auto;
+			border-radius: 8px;
+			width: 90%;
+			max-width: 600px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+			animation: modalSlideIn 0.3s ease;
+		}
+
+		.modal_small {
+			max-width: 400px;
+		}
+
+		@keyframes modalSlideIn {
+			from {
+				transform: translateY(-50px);
+				opacity: 0;
+			}
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
+
+		.modal_header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 24px;
+			border-bottom: 1px solid #f0f0f0;
+			background: linear-gradient(135deg, #003d79 0%, #0056b3 100%);
+		}
+
+		.modal_header h3 {
+			margin: 0;
+			font-size: 18px;
+			font-weight: 600;
+			color: #fff;
+		}
+
+		.modal_close {
+			color: #fff;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+			line-height: 1;
+			transition: transform 0.2s;
+		}
+
+		.modal_close:hover {
+			transform: rotate(90deg);
+		}
+
+		.modal_body {
+			padding: 24px;
+		}
+
+		.modal_footer {
+			padding: 16px 24px;
+			border-top: 1px solid #f0f0f0;
+			display: flex;
+			justify-content: flex-end;
+			gap: 12px;
+		}
+
+		/* 表单样式 */
+		.form_group {
+			margin-bottom: 20px;
+		}
+
+		.form_group label {
+			display: block;
+			margin-bottom: 8px;
+			font-size: 14px;
+			font-weight: 500;
+			color: #333;
+		}
+
+		.form_group input[type="text"],
+		.form_group select {
+			width: 100%;
+			padding: 10px 12px;
+			border: 1px solid #d0d7de;
+			border-radius: 4px;
+			font-size: 14px;
+			transition: border-color 0.3s;
+		}
+
+		.form_group input[type="text"]:focus,
+		.form_group select:focus {
+			outline: none;
+			border-color: #003d79;
+			box-shadow: 0 0 0 3px rgba(0,61,121,0.1);
+		}
+
+		.form_group input[type="text"]:disabled {
+			background: #f5f7fa;
+			color: #666;
+			cursor: not-allowed;
+		}
+
+		.form_hint {
+			display: block;
+			margin-top: 5px;
+			font-size: 12px;
+			color: #999;
+		}
+
+		/* 按钮样式 */
+		.btn_cancel, .btn_submit, .btn_upload {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 4px;
+			font-size: 14px;
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		.btn_cancel {
+			background: #f5f7fa;
+			color: #666;
+		}
+
+		.btn_cancel:hover {
+			background: #e8eaed;
+		}
+
+		.btn_submit {
+			background: #003d79;
+			color: #fff;
+		}
+
+		.btn_submit:hover:not(:disabled) {
+			background: #0056b3;
+		}
+
+		.btn_submit:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+
+		.btn_upload {
+			background: #f5f7fa;
+			color: #003d79;
+			border: 1px solid #d0d7de;
+		}
+
+		.btn_upload:hover {
+			background: #e8f0fe;
+			border-color: #003d79;
+		}
+
+		/* 头像上传区域 */
+		.avatar_upload_area {
+			text-align: center;
+		}
+
+		.avatar_preview {
+			margin-bottom: 20px;
+		}
+
+		.avatar_preview img {
+			width: 150px;
+			height: 150px;
+			border-radius: 50%;
+			border: 4px solid #003d79;
+			object-fit: cover;
+		}
+
+		.upload_actions {
+			display: flex;
+			justify-content: center;
+			gap: 12px;
+			margin-bottom: 10px;
+		}
+
+		.upload_hint {
+			display: block;
+			color: #999;
+			font-size: 12px;
+			margin-top: 10px;
+		}
+
+		/* 响应式设计 */
+		@media (max-width: 1280px) {
+			.personal_center_container {
+				width: 95%;
+				flex-direction: column;
+			}
+
+			.personal_sidebar {
+				width: 100%;
+			}
+
+			.sidebar_menu {
+				display: flex;
+				overflow-x: auto;
+			}
+
+			.menu_item {
+				flex-shrink: 0;
+			}
+
+			.statistics_grid {
+				grid-template-columns: 1fr;
+			}
+
+			.modal_content {
+				width: 95%;
+				margin: 10% auto;
+			}
+		}
+
+		/* 通知提示样式 */
+		.notification {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			padding: 15px 20px;
+			border-radius: 6px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+			z-index: 10001;
+			min-width: 250px;
+			opacity: 0;
+			transform: translateX(100%);
+			transition: all 0.3s ease;
+			font-size: 14px;
+		}
+
+		.notification.show {
+			opacity: 1;
+			transform: translateX(0);
+		}
+
+		.notification-success {
+			background: #52c41a;
+			color: #fff;
+		}
+
+		.notification-error {
+			background: #f5222d;
+			color: #fff;
+		}
+
+		.notification-info {
+			background: #1890ff;
+			color: #fff;
+		}
+
+		.notification-warning {
+			background: #faad14;
+			color: #fff;
+		}
+
+		/* 账号安全页面样式 */
+		.security_section {
+			margin-bottom: 30px;
+			padding-bottom: 30px;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.security_section:last-child {
+			border-bottom: none;
+		}
+
+		.section_subtitle {
+			font-size: 16px;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 20px;
+		}
+
+		.security_form {
+			max-width: 500px;
+		}
+
+		.form_actions {
+			margin-top: 20px;
+		}
+
+		.security_item, .setting_item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 0;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.security_item:last-child, .setting_item:last-child {
+			border-bottom: none;
+		}
+
+		.security_info, .setting_info {
+			flex: 1;
+		}
+
+		.security_label, .setting_label {
+			font-size: 15px;
+			font-weight: 500;
+			color: #333;
+			margin-bottom: 5px;
+		}
+
+		.security_desc, .setting_desc {
+			font-size: 13px;
+			color: #999;
+		}
+
+		/* 开关样式 */
+		.switch {
+			position: relative;
+			display: inline-block;
+			width: 50px;
+			height: 26px;
+		}
+
+		.switch input {
+			opacity: 0;
+			width: 0;
+			height: 0;
+		}
+
+		.slider {
+			position: absolute;
+			cursor: pointer;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-color: #ccc;
+			transition: .4s;
+			border-radius: 26px;
+		}
+
+		.slider:before {
+			position: absolute;
+			content: "";
+			height: 20px;
+			width: 20px;
+			left: 3px;
+			bottom: 3px;
+			background-color: white;
+			transition: .4s;
+			border-radius: 50%;
+		}
+
+		input:checked + .slider {
+			background-color: #003d79;
+		}
+
+		input:checked + .slider:before {
+			transform: translateX(24px);
+		}
+
+		input:disabled + .slider {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		.status_badge {
+			padding: 4px 12px;
+			border-radius: 12px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.status_success {
+			background: #f0f9ff;
+			color: #52c41a;
+		}
+
+		/* 课程记录表格样式 */
+		.course_records_table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 10px;
+		}
+
+		.course_records_table th,
+		.course_records_table td {
+			padding: 12px;
+			text-align: left;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.course_records_table th {
+			background: #f5f7fa;
+			font-weight: 600;
+			color: #333;
+			font-size: 14px;
+		}
+
+		.course_records_table td {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.course_records_table tr:hover {
+			background: #f9fafb;
+		}
+
+		.grade_badge {
+			padding: 4px 10px;
+			border-radius: 4px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.grade_complete {
+			background: #f0f9ff;
+			color: #003d79;
+		}
+
+		.grade_pending {
+			background: #fff7e6;
+			color: #faad14;
+		}
+
+		.empty_state {
+			text-align: center;
+			padding: 60px 20px;
+			color: #999;
+			font-size: 14px;
+		}
+
+		/* 系统设置样式 */
+		.settings_section {
+			margin-bottom: 30px;
+			padding-bottom: 30px;
+			border-bottom: 1px solid #f0f0f0;
+		}
+
+		.settings_section:last-of-type {
+			border-bottom: none;
+		}
+
+		.setting_select {
+			padding: 8px 12px;
+			border: 1px solid #d0d7de;
+			border-radius: 4px;
+			font-size: 14px;
+			background: #fff;
+			color: #333;
+			cursor: pointer;
+			min-width: 150px;
+		}
+
+		.setting_select:focus {
+			outline: none;
+			border-color: #003d79;
+			box-shadow: 0 0 0 3px rgba(0,61,121,0.1);
+		}
+
+		.settings_actions {
+			margin-top: 30px;
+			display: flex;
+			gap: 12px;
+		}
+	</style>
 	</body>
+
 </html>

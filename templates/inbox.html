@@ -5,7 +5,7 @@
     <title>消息中心</title>
     <link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet" type="text/css" />
     <link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon"/>
-    <script src="{{ url_for('static', filename='js/jquery1.42.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}" type="text/javascript"></script>
 </head>
 
 <body>
@@ -19,250 +19,354 @@
             <ul class="nav_box">
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
-                <li class="nav_1">
-                    <a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
-                    <div class="nav_slide">
-                        <div class="nav_slide1">
-                            <a href="{{ url_for('news_center') }}">课程公告<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
-                            <a href="{{ url_for('course_discussion') }}">课程讨论<span><img src="{{ url_for('static', filename='images/siade_bg1.png') }}"/></span></a>
-                        </div>
-                    </div>
-                </li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('recommed') }}">课程推荐</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('course_selection') }}">选课中心</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('index') }}">首页</a></li>
             </ul>
         </div>
-    </div>
-
-    <div class="content_box">
-        <h2 style="text-align: center; margin: 20px 0;">消息中心</h2>
-        
-        <!-- 简化消息列表显示 -->
-        <div class="inbox-container">
-            {% if messages %}
-                <ul class="message-list">
-                    {% for message in messages %}
-                    <li class="message-item">
-                        <div class="message-header">
-                            <span class="message-title">{{ message.topic }}</span>
-                            <span class="message-time">{{ message.time_str }}</span>
-                        </div>
-                        <div class="message-content">
-                            {{ message.content|truncate(100) }}
-                        </div>
-                        <div class="message-actions">
-                            <a href="#" class="read-more" data-id="{{ message.id }}">查看详情</a>
-                        </div>
-                    </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <div class="no-messages">
-                    <p>暂无消息</p>
-                </div>
-            {% endif %}
-        </div>
+        <script>
+            $(".nav_1").mouseenter(function(){
+                $(this).find(".nav_slide").slideDown()
+            });
+            $(".nav_1").mouseleave(function(){
+                $(".nav_slide").slideUp()
+            });
+        </script>
     </div>
 </div>
 
-<!-- 消息详情模态框 -->
-<div id="message-modal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modal-title">消息详情</h3>
-            <span class="close-button">&times;</span>
+<!-- 消息中心主体 -->
+<div class="inbox_container">
+    <!-- 顶部筛选与搜索 -->
+    <div class="toolbar">
+        <div class="filters">
+            <div class="filter_group">
+                <label>分类：</label>
+                <select id="filter-category" class="filter_select">
+                    <option value="">全部</option>
+                    <option value="教务通知">教务通知</option>
+                    <option value="选课公告">选课公告</option>
+                    <option value="考试安排">考试安排</option>
+                    <option value="系统公告">系统公告</option>
+                </select>
+            </div>
+            <div class="filter_group">
+                <label>排序：</label>
+                <select id="filter-sort" class="filter_select">
+                    <option value="desc">最新</option>
+                    <option value="asc">最早</option>
+                </select>
+            </div>
         </div>
-        <div class="modal-body">
-            <p><strong>发布时间：</strong><span id="modal-time"></span></p>
-            <div id="modal-content"></div>
+        <div class="search_box">
+            <input type="text" id="search-keyword" class="search_input" placeholder="搜索标题或内容..." />
+            <button class="search_btn" id="search-btn">🔍 搜索</button>
         </div>
     </div>
+
+    <!-- 公告列表 -->
+    <div id="announcement-list" class="announcement_list">
+        <div class="loading">加载中...</div>
+    </div>
 </div>
+
+<!-- 消息提示 -->
+<div id="message" class="message_toast"></div>
 
 <style>
-/* 模态框样式 */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
+.inbox_container {
+    width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px 40px 20px;
 }
 
-.modal-content {
-    background-color: white;
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
     border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+    margin-bottom: 20px;
 }
 
-.modal-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
+.filters {
     display: flex;
-    justify-content: space-between;
+    gap: 16px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
-.modal-header h3 {
-    margin: 0;
-    color: #333;
-}
-
-.close-button {
-    font-size: 28px;
-    cursor: pointer;
-    color: #999;
-}
-
-.close-button:hover {
-    color: #333;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.modal-body p {
-    margin: 0 0 10px 0;
-}
-
-.modal-body #modal-content {
-    line-height: 1.6;
-    color: #555;
-}
-
-.inbox-container {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.message-list {
-    list-style: none;
-    padding: 0;
-}
-
-.message-item {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #f9f9f9;
-}
-
-.message-item.unread {
-    background-color: #e8f4ff;
-    border-color: #409eff;
-}
-
-.message-header {
+.filter_group {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
-
-.message-title {
-    font-weight: bold;
-    font-size: 16px;
-}
-
-.message-time {
-    color: #999;
+    align-items: center;
+    gap: 8px;
     font-size: 14px;
-}
-
-.message-content {
     color: #333;
-    margin-bottom: 10px;
-    line-height: 1.5;
 }
 
-.message-actions {
+.filter_select {
+    padding: 8px 10px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    font-size: 13px;
+    background: #fff;
+    min-width: 120px;
+}
+
+.search_box {
+    display: flex;
+    gap: 10px;
+    min-width: 320px;
+}
+
+.search_input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #d0d7de;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.search_btn {
+    padding: 10px 16px;
+    background: #003d79;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.search_btn:hover { background: #0056b3; }
+
+.announcement_list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.announcement_card {
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     display: flex;
     justify-content: space-between;
+    gap: 12px;
+}
+
+.card_left { flex: 1; }
+
+.card_title_row {
+    display: flex;
     align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
-.read-more {
-    color: #409eff;
-    text-decoration: none;
+.card_title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
 }
 
-.read-more:hover {
-    text-decoration: underline;
-}
-
-.unread-tag {
-    background-color: #409eff;
-    color: white;
+.tag {
     padding: 2px 8px;
     border-radius: 10px;
     font-size: 12px;
+    font-weight: 500;
+}
+.tag_info { background: #e6f7ff; color: #1890ff; }
+.tag_warning { background: #fff7e6; color: #fa8c16; }
+.tag_exam { background: #fff1f0; color: #f5222d; }
+.tag_system { background: #f0f0f0; color: #666; }
+
+.badge_pinned {
+    padding: 2px 8px;
+    background: #f5222d;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-.no-messages {
+.card_meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.card_desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.card_right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    min-width: 120px;
+}
+
+.read_status {
+    font-size: 12px;
+    color: #1890ff;
+}
+.read_status.read { color: #999; }
+
+.btn_link {
+    color: #003d79;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border: 1px solid #003d79;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+.btn_link:hover {
+    background: #003d79;
+    color: #fff;
+}
+
+.loading, .error, .empty_state {
     text-align: center;
-    padding: 50px 0;
+    padding: 40px 20px;
     color: #999;
+    font-size: 14px;
+}
+.error { color: #f56c6c; }
+
+.message_toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10001;
+    min-width: 250px;
+    display: none;
+    font-size: 14px;
+}
+.message_toast.success { background: #52c41a; color: #fff; }
+.message_toast.error { background: #f5222d; color: #fff; }
+
+@media (max-width: 1080px) {
+    .inbox_container { width: 95%; }
+    .toolbar { flex-direction: column; gap: 12px; align-items: flex-start; }
+    .search_box { width: 100%; }
 }
 </style>
 
 <script>
-$(".nav_1").mouseenter(function(){
-    $(this).find(".nav_slide").slideDown()
-});
+$(function() {
+    var readStoreKey = 'read_announcements';
 
-$(".nav_1").mouseleave(function(){
-    $(".nav_slide").slideUp()
-});
+    function getReadIds() {
+        try {
+            var data = localStorage.getItem(readStoreKey);
+            return data ? JSON.parse(data) : [];
+        } catch(e) { return []; }
+    }
 
-$(document).ready(function() {
-    // 处理查看详情点击事件
-    $('.read-more').click(function(e) {
-        e.preventDefault();
-        const messageId = $(this).data('id');
-        const messageTitle = $(this).closest('.message-item').find('.message-title').text();
-        const messageTime = $(this).closest('.message-item').find('.message-time').text();
-        const messageContent = $(this).closest('.message-item').find('.message-content').text();
-        
-        // 填充模态框内容
-        $('#modal-title').text(messageTitle);
-        $('#modal-time').text(messageTime);
-        $('#modal-content').text(messageContent);
-        
-        // 显示模态框
-        $('#message-modal').css('display', 'flex');
-    });
-    
-    // 关闭模态框 - 点击关闭按钮
-    $('.close-button').click(function() {
-        $('#message-modal').hide();
-    });
-    
-    // 关闭模态框 - 点击遮罩层
-    $('#message-modal').click(function(e) {
-        if (e.target === this) {
-            $(this).hide();
+    function setReadId(id) {
+        var ids = getReadIds();
+        if (ids.indexOf(id) === -1) {
+            ids.push(id);
+            localStorage.setItem(readStoreKey, JSON.stringify(ids));
         }
-    });
-    
-    // 关闭模态框 - 按ESC键
-    $(document).keydown(function(e) {
-        if (e.keyCode === 27) { // ESC键
-            $('#message-modal').hide();
+    }
+
+    function applyFilters() {
+        $("#announcement-list").html('<div class="loading">加载中...</div>');
+        var category = $("#filter-category").val();
+        var sort = $("#filter-sort").val();
+        var keyword = $("#search-keyword").val().trim();
+
+        $.ajax({
+            url: "/api/announcements",
+            type: "GET",
+            data: {
+                category: category,
+                sort: sort,
+                keyword: keyword
+            },
+            success: function(res) {
+                if (res.success && res.data) {
+                    renderAnnouncements(res.data);
+                } else {
+                    $("#announcement-list").html('<div class="error">加载失败，请刷新重试</div>');
+                }
+            },
+            error: function() {
+                $("#announcement-list").html('<div class="error">加载失败，请刷新重试</div>');
+            }
+        });
+    }
+
+    function renderAnnouncements(items) {
+        if (!items || items.length === 0) {
+            $("#announcement-list").html('<div class="empty_state">暂无公告</div>');
+            return;
         }
+        var readIds = getReadIds();
+        var html = '';
+        items.forEach(function(item) {
+            var tagClass = 'tag_info';
+            if (item.category === '选课公告') tagClass = 'tag_warning';
+            else if (item.category === '考试安排') tagClass = 'tag_exam';
+            else if (item.category === '系统公告') tagClass = 'tag_system';
+
+            var isRead = readIds.indexOf(item.id) !== -1;
+            var readClass = isRead ? 'read' : '';
+            var pinned = item.pinned ? '<span class="badge_pinned">置顶</span>' : '';
+
+            html += `
+                <div class="announcement_card">
+                    <div class="card_left">
+                        <div class="card_title_row">
+                            <h3 class="card_title">${item.title}</h3>
+                            <span class="tag ${tagClass}">${item.category}</span>
+                            ${pinned}
+                        </div>
+                        <div class="card_meta">
+                            <span>发布单位：${item.publisher || '教务处'}</span>
+                            <span>发布时间：${item.time}</span>
+                        </div>
+                        <div class="card_desc">${(item.content || '').substring(0, 80)}...</div>
+                    </div>
+                    <div class="card_right">
+                        <span class="read_status ${readClass}">${isRead ? '已读' : '未读'}</span>
+                        <a class="btn_link" href="/announcement/${item.id}" target="_blank" onclick="markRead(${item.id})">查看详情</a>
+                    </div>
+                </div>
+            `;
+        });
+        $("#announcement-list").html(html);
+    }
+
+    window.markRead = function(id) {
+        setReadId(id);
+    }
+
+    $("#search-btn").click(applyFilters);
+    $("#search-keyword").keypress(function(e) {
+        if (e.which === 13) applyFilters();
     });
+    $("#filter-category, #filter-sort").change(applyFilters);
+
+    applyFilters();
 });
 </script>
 

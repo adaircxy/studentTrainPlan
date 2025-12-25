@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>课程论坛调试页面</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .success { color: green; }
+        .error { color: red; }
+        .loading { color: blue; }
+        button { padding: 10px 15px; margin: 5px; }
+        textarea { width: 100%; height: 100px; }
+        input[type="text"] { width: 100%; padding: 5px; }
+        #topics-display { border: 1px solid #ccc; padding: 10px; min-height: 200px; }
+        .topic-item { border-bottom: 1px solid #eee; padding: 10px; }
+    </style>
+</head>
+<body>
+    <h1>课程论坛调试页面</h1>
+    
+    <!-- API测试区域 -->
+    <div class="test-section">
+        <h2>1. API接口测试</h2>
+        <button onclick="testGetTopics()">测试获取话题列表</button>
+        <div id="api-result"></div>
+    </div>
+    
+    <!-- 发布话题测试 -->
+    <div class="test-section">
+        <h2>2. 发布话题测试</h2>
+        <input type="text" id="test-title" placeholder="话题标题" value="测试话题">
+        <textarea id="test-content" placeholder="话题内容">这是一个测试话题，用来验证发布功能。</textarea>
+        <button onclick="testPublishTopic()">测试发布话题</button>
+        <div id="publish-result"></div>
+    </div>
+    
+    <!-- 完整论坛功能测试 -->
+    <div class="test-section">
+        <h2>3. 完整论坛功能测试</h2>
+        <button onclick="loadForumTopics()">加载论坛话题</button>
+        <div id="topics-display"></div>
+    </div>
+    
+    <script>
+    // 测试获取话题列表API
+    function testGetTopics() {
+        $("#api-result").html('<div class="loading">正在测试API...</div>');
+        
+        $.ajax({
+            url: "/api/get_discussion_topics",
+            type: "GET",
+            data: {
+                page: 1,
+                sort_by: 'latest',
+                filter: 'all',
+                per_page: 10
+            },
+            timeout: 10000,
+            success: function(res) {
+                console.log('API成功响应:', res);
+                $("#api-result").html(`
+                    <div class="success">
+                        <h3>✅ API测试成功!</h3>
+                        <p>返回话题数量: ${res.data ? res.data.length : 0}</p>
+                        <details>
+                            <summary>查看详细数据</summary>
+                            <pre>${JSON.stringify(res, null, 2)}</pre>
+                        </details>
+                    </div>
+                `);
+            },
+            error: function(xhr, status, error) {
+                console.log('API错误:', {xhr: xhr, status: status, error: error});
+                $("#api-result").html(`
+                    <div class="error">
+                        <h3>❌ API测试失败!</h3>
+                        <p>状态: ${xhr.status}</p>
+                        <p>错误: ${error}</p>
+                        <p>响应: ${xhr.responseText}</p>
+                    </div>
+                `);
+            }
+        });
+    }
+    
+    // 测试发布话题
+    function testPublishTopic() {
+        var title = $("#test-title").val();
+        var content = $("#test-content").val();
+        
+        if (!title || !content) {
+            $("#publish-result").html('<div class="error">请填写标题和内容</div>');
+            return;
+        }
+        
+        $("#publish-result").html('<div class="loading">正在发布话题...</div>');
+        
+        $.ajax({
+            url: "/course_discussion",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                topic: title,
+                comments: content
+            }),
+            success: function(res) {
+                console.log('发布成功:', res);
+                $("#publish-result").html(`
+                    <div class="success">
+                        <h3>✅ 发布成功!</h3>
+                        <p>话题ID: ${res.news_id}</p>
+                        <p>消息: ${res.message}</p>
+                    </div>
+                `);
+                // 发布成功后重新加载话题列表
+                setTimeout(testGetTopics, 1000);
+            },
+            error: function(xhr) {
+                console.log('发布失败:', xhr);
+                var errorMsg = "发布失败";
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMsg = xhr.responseJSON.message;
+                }
+                $("#publish-result").html(`
+                    <div class="error">
+                        <h3>❌ 发布失败!</h3>
+                        <p>${errorMsg}</p>
+                    </div>
+                `);
+            }
+        });
+    }
+    
+    // 加载论坛话题（模拟真实论坛页面的功能）
+    function loadForumTopics() {
+        $("#topics-display").html('<div class="loading">正在加载话题...</div>');
+        
+        $.ajax({
+            url: "/api/get_discussion_topics",
+            type: "GET",
+            data: {
+                page: 1,
+                sort_by: 'latest',
+                filter: 'all',
+                per_page: 10
+            },
+            success: function(res) {
+                if (res.success && res.data) {
+                    renderTopics(res.data);
+                } else {
+                    $("#topics-display").html('<div class="error">加载失败: ' + (res.message || '未知错误') + '</div>');
+                }
+            },
+            error: function(xhr, status, error) {
+                $("#topics-display").html(`
+                    <div class="error">
+                        加载失败: ${error} (状态: ${xhr.status})
+                    </div>
+                `);
+            }
+        });
+    }
+    
+    // 渲染话题列表
+    function renderTopics(topics) {
+        if (!topics || topics.length === 0) {
+            $("#topics-display").html('<div>暂无话题</div>');
+            return;
+        }
+        
+        var html = '<h3>话题列表 (' + topics.length + '个)</h3>';
+        topics.forEach(function(topic) {
+            html += `
+                <div class="topic-item">
+                    <h4>${topic.topic}</h4>
+                    <p>${topic.content}</p>
+                    <small>
+                        作者: ${topic.commenter} | 
+                        时间: ${topic.create_time} | 
+                        回复: ${topic.reply_count} | 
+                        浏览: ${topic.view_count}
+                    </small>
+                </div>
+            `;
+        });
+        
+        $("#topics-display").html(html);
+    }
+    
+    // 页面加载时自动测试
+    $(function() {
+        console.log('调试页面加载完成');
+        testGetTopics(); // 自动测试API
+    });
+    </script>
+</body>
+</html>
