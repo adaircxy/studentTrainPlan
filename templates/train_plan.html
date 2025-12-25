@@ -1,49 +1,23 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link href="../static/css/style1.css" rel="stylesheet" type="text/css" />
-    <script src="../static/js/jquery-2.2.4.min.js" type="text/javascript"></script>
-    <script src="../static/js/jquery.js"></script>
-    <script src="../static/js/jquery.superslide.2.1.1.js" type="text/javascript"></script>
-    <script src="../static/js/actions.js" type="text/javascript"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
-    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
-
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="icon" href="../static/images/logo.ico" type="image/x-icon"/>
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <title>培养计划</title>
+    <title>课程进度</title>
+    <link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.ico') }}" type="image/x-icon"/>
+    <script src="{{ url_for('static', filename='js/jquery-2.2.4.min.js') }}" type="text/javascript"></script>
+</head>
 <body>
 <div class="wapper_box">
     <div class="header_box"></div>
     <div class="header_box1">
         <div class="header_box2">
-            <a class="logo_box" href="{{ url_for('index') }}"><img src="../static/images/logo1.jpg"/></a>
+            <a class="logo_box" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='images/logo1.jpg') }}"/></a>
             <ul class="nav_box">
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('personal_information') }}">个人中心</a></li>
-                <!--251201，用户中心建设完成-->
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('inbox') }}">消息中心</a></li>
-                <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a>
-                    <div class="nav_slide">
-                        <div class="nav_slide1">
-                            <a href="{{ url_for('news_center') }}">课程公告<span><img src="../static/images/siade_bg1.png"/></span></a>
-                            <a href="{{ url_for('course_discussion') }}">课程讨论<span><img src="../static/images/siade_bg1.png"/></span></a>
-                        </div>
-                    </div>
-                </li>
+                <li class="nav_1"><a class="nav_but" href="{{ url_for('news_center') }}">课程论坛</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('recommed') }}">课程推荐</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('course_selection') }}">选课中心</a></li>
                 <li class="nav_1"><a class="nav_but" href="{{ url_for('train_plan') }}">课程进度</a></li>
@@ -57,296 +31,389 @@
             $(".nav_1").mouseleave(function(){
                 $(".nav_slide").slideUp()
             });
-            //$(".producys_box").mouseout(function(){
-            // $(this).find(".producys_box1").slideUp();
-            //});
         </script>
     </div>
-    <!--banner部分开始-->
-
-
-    <!--banner部分结束-->
-
-    <!--内容开始-->
-
-
-
-    <!--内容结束-->
-
 </div>
 
-<div class="content_box_bot1">
-    <ul class="content_box_bot_l">
-        <div class="info_news">
-            <div class="info_news_but"><p class="on">课程进度</p><p>评分</p></div>
+<!-- 课程进度主体内容 -->
+<div class="progress_container">
+    <!-- 顶部进度总览 -->
+    <div class="summary_cards">
+        <div class="summary_card">
+            <div class="summary_icon">📚</div>
+            <div class="summary_content">
+                <div class="summary_value" id="summary-total">0</div>
+                <div class="summary_label">课程总数</div>
+                        </div>
+                    </div>
+        <div class="summary_card">
+            <div class="summary_icon">✅</div>
+            <div class="summary_content">
+                <div class="summary_value" id="summary-completed">0</div>
+                <div class="summary_label">已完成</div>
+                        </div>
+                    </div>
+        <div class="summary_card">
+            <div class="summary_icon">⏳</div>
+            <div class="summary_content">
+                <div class="summary_value" id="summary-in-progress">0</div>
+                <div class="summary_label">进行中</div>
+                        </div>
+                    </div>
+        <div class="summary_card warning_card">
+            <div class="summary_icon">🕒</div>
+            <div class="summary_content">
+                <div class="summary_value" id="summary-pending">0</div>
+                <div class="summary_label">待开始</div>
+                        </div>
+                        </div>
+                    </div>
 
-            <div class="col-md-4">
-                <ul class="info_news_text info_news_text1 ">
-                    <p class="info1"> 总进度</p>
-                    <div class="process-parent1">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on1">0%</p>
+    <!-- 课程进度详情 -->
+    <div class="courses_section">
+        <div class="section_header">
+            <h2 class="section_title">课程进度详情</h2>
                         </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info2"> 思想政治</p>
-                    <div class="process-parent2">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on2">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
+        <div id="courses-list" class="courses_list">
+            <div class="loading">加载中...</div>
                         </div>
                     </div>
-                    <p class="info3"> 外语</p>
-                    <div class="process-parent3">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on3">0%</p>
                         </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info4"> 文化素质</p>
-                    <div class="process-parent4">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on4">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info5"> 体育</p>
-                    <div class="process-parent5">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on5">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info6"> 军事</p>
-                    <div class="process-parent6">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on6">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info7"> 健康教育</p>
-                    <div class="process-parent7">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on7">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info8"> 数学</p>
-                    <div class="process-parent8">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on8">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info9"> 物理</p>
-                    <div class="process-parent9">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on9">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info10"> 计算机</p>
-                    <div class="process-parent10">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on10">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info11"> 学科基础</p>
-                    <div class="process-parent11">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on11">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <p class="info12"> 专业选修</p>
-                    <div class="process-parent12">
-                        <div class="progress-bar bg-success" style="width:0%"><p class="on2" id="on12">0%</p>
-                        </div>
-                        <div class="progress-bar bg-warning" style="width:0%">
-                        </div>
-                    </div>
-                    <div class="submit">
-                        <input type="submit" onclick="submit()" value="提交 ">
-                    </div>
-                    <div class="reset">
-                        <input type="reset" onclick="rebuild()" name="butReset" value="撤销">
-                    </div>
-                </ul>
-            </div>
 
-            <ul class="info_news_text info_news_text2">
-                <select id="domain" style="width:220px; height: 40px">
-                    <option value="">课程类别</option>
-                </select>
-                <p></p>
-                <select id="course" style="width:220px; height: 40px">
-                    <option value="">课程</option>
-                </select>
-                <p></p>
-                <input type="text" id="score" placeholder="请输入分数(1-5)" style="width:220px; height: 40px; padding-left: 10px;">
-                <p></p>
-                <div class="scoreConfirm"  style="width:220px; height: 40px">
-                    <input type="button" id='btnScore' value="确定评分">
+<!-- 消息提示 -->
+<div id="message" class="message_toast"></div>
+
+<script>
+$(function() {
+    // 加载课程进度数据
+    function loadCourseProgress() {
+        $("#courses-list").html('<div class="loading">加载中...</div>');
+        $.ajax({
+            url: "/api/get_course_progress_detail",
+            type: "GET",
+            success: function(res) {
+                if (res.success && res.data) {
+                    var summary = res.data.summary || {};
+                    var courses = res.data.courses || [];
+                    renderSummary(summary);
+                    renderCourses(courses);
+                } else {
+                    $("#courses-list").html('<div class="error">加载失败，请刷新重试</div>');
+                }
+            },
+            error: function() {
+                $("#courses-list").html('<div class="error">加载失败，请刷新重试</div>');
+            }
+        });
+    }
+
+    // 渲染汇总
+    function renderSummary(summary) {
+        $("#summary-total").text(summary.total_courses || 0);
+        $("#summary-completed").text(summary.completed || 0);
+        $("#summary-in-progress").text(summary.in_progress || 0);
+        $("#summary-pending").text(summary.pending || 0);
+    }
+
+    // 渲染课程列表
+    function renderCourses(courses) {
+        if (!courses || courses.length === 0) {
+            $("#courses-list").html('<div class="empty_state">暂无课程进度数据</div>');
+            return;
+        }
+        var html = '';
+        courses.forEach(function(course) {
+            var statusClass = 'status_' + course.status;
+            var warningBadge = course.near_due && course.status !== 'completed'
+                ? '<span class="badge_warning">临近截止</span>' : '';
+
+            html += `
+                <div class="course_card">
+                    <div class="course_header">
+                        <div>
+                            <h3 class="course_title">${course.co_name}</h3>
+                            <div class="course_meta">
+                                <span class="meta_item">任课教师：${course.teacher}</span>
+                                <span class="meta_item">上课时间：${course.class_time}</span>
+                    </div>
+                        </div>
+                        <div class="course_status">
+                            <span class="status_badge ${statusClass}">${course.status_text}</span>
+                            ${warningBadge}
+                        </div>
+                    </div>
+                    <div class="course_progress">
+                        <div class="progress_info">
+                            <span class="progress_label">进度</span>
+                            <span class="progress_value">${course.progress}%</span>
+                        </div>
+                        <div class="progress_bar_container">
+                            <div class="progress_bar" style="width: ${course.progress}%;"></div>
+                        </div>
+                        <div class="progress_extra">
+                            <span>周次：${course.current_week} / ${course.total_weeks}</span>
+                            <span>最近：${course.recent_content}</span>
+                        </div>
+                    </div>
+                    <div class="course_actions">
+                        <a class="btn_link" href="#" onclick="showMessage('即将进入课程，请在课程平台中继续学习', true); return false;">进入课程</a>
+                        <a class="btn_link secondary" href="#" onclick="showMessage('详情功能待接入课程平台', false); return false;">查看详情</a>
+                    </div>
                 </div>
-            </ul>
+            `;
+        });
+        $("#courses-list").html(html);
+    }
 
-            <script>
-                $(".info_news_but p").each(function(n){
+    // 显示消息
+    window.showMessage = function(text, isSuccess) {
+        var messageDiv = $("#message");
+        messageDiv.text(text);
+        messageDiv.removeClass("success error").addClass(isSuccess ? "success" : "error");
+        messageDiv.fadeIn(200);
 
-                    $(this).click(function(){
-                        $(this).addClass("on").siblings("p").removeClass("on");
-                        $(".info_news_text").hide(400).eq(n).show(500);
-                    });
-                });
+        setTimeout(function() {
+            messageDiv.fadeOut(200);
+        }, 3000);
+    }
 
-                // 获取并更新进度数据
-                $(document).ready(function() {
-                    // 加载课程分类
-                    $.ajax({
-                        url: "/api/get_course_categories",
-                        type: "GET",
-                        success: function(response) {
-                            if (response.success) {
-                                var domainSelect = $("#domain");
-                                $.each(response.data, function(index, category) {
-                                    domainSelect.append($("<option></option>").attr("value", category).text(category));
-                                });
-                            }
-                        }
-                    });
+    // 初始化
+    loadCourseProgress();
+});
+</script>
 
-                    // 监听分类选择变化
-                    $("#domain").change(function() {
-                        var category = $(this).val();
-                        var courseSelect = $("#course");
-                        courseSelect.empty();
-                        courseSelect.append($("<option></option>").attr("value", "").text("课程"));
-                        
-                        if (category) {
-                            $.ajax({
-                                url: "/api/get_courses_by_category",
-                                type: "GET",
-                                data: { category: category },
-                                success: function(response) {
-                                    if (response.success) {
-                                        $.each(response.data, function(index, course) {
-                                            courseSelect.append($("<option></option>").attr("value", course.co_no).text(course.co_name));
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
+<style>
+.progress_container {
+    width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
 
-                    // 提交评分
-                    $("#btnScore").click(function() {
-                        var co_no = $("#course").val();
-                        var score = $("#score").val();
-                        
-                        if (!co_no) {
-                            alert("请选择课程");
-                            return;
-                        }
-                        if (!score) {
-                            alert("请输入分数");
-                            return;
-                        }
-                        // 简单的分数验证 1-5
-                        if (isNaN(score) || score < 1 || score > 5) {
-                            alert("请输入1-5之间的有效分数");
-                            return;
-                        }
+.summary_cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
 
-                        $.ajax({
-                            url: "/api/submit_course_score",
-                            type: "POST",
-                            contentType: "application/json",
-                            data: JSON.stringify({ co_no: co_no, score: score }),
-                            success: function(response) {
-                                if (response.success) {
-                                    alert("评分成功！");
-                                    // 可以在这里清空输入或刷新进度等
-                                    $("#score").val("");
-                                } else {
-                                    alert("评分失败: " + response.message);
-                                }
-                            },
-                            error: function(xhr) {
-                                var msg = "请求失败";
-                                if (xhr.responseJSON && xhr.responseJSON.message) {
-                                    msg = xhr.responseJSON.message;
-                                }
-                                alert(msg);
-                            }
-                        });
-                    });
+.summary_card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid #003d79;
+}
 
-                    // 加载进度条数据
-                    $.ajax({
-                        url: "/api/get_progress",
-                        type: "GET",
-                        success: function(response) {
-                            if (response.success && response.data) {
-                                var data = response.data;
-                                
-                                // 定义前端显示的分类名称与HTML中class的映射关系（或者直接遍历）
-                                // 观察HTML结构：
-                                // 总进度: .info1, .process-parent1
-                                // 思想政治: .info2, .process-parent2
-                                // 外语: .info3, .process-parent3
-                                // ...
-                                
-                                var categoryMap = {
-                                    '总进度': 1,
-                                    '思想政治': 2,
-                                    '外语': 3,
-                                    '文化素质': 4,
-                                    '体育': 5,
-                                    '军事': 6,
-                                    '健康教育': 7,
-                                    '数学': 8,
-                                    '物理': 9,
-                                    '计算机': 10,
-                                    '学科基础': 11,
-                                    '专业选修': 12
-                                };
-                                
-                                for (var key in data) {
-                                    if (categoryMap.hasOwnProperty(key)) {
-                                        var index = categoryMap[key];
-                                        var percentage = data[key].percentage;
-                                        var text = percentage + "%";
-                                        
-                                        // 更新进度条宽度
-                                        $(".process-parent" + index + " .progress-bar.bg-success").css("width", percentage + "%");
-                                        
-                                        // 更新文本
-                                        $("#on" + index).text(text);
-                                    }
-                                }
-                            } else {
-                                console.error("获取进度数据失败:", response.message);
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("请求失败:", error);
-                        }
-                    });
-                });
-            </script>
-            <script  type="text/javascript">
-                window.onload = function(){
-                    initScore();
-                };
-            </script>
+.warning_card {
+    border-left-color: #faad14;
+}
 
-        </div>
-    </ul>
-    <div id="container" style="width:1600px; height:750px;position: absolute; margin-top:0px; margin-left:310px;"></div>
-    <script type="text/javascript" src="../static/js/Tree.js"></script>
+.summary_icon {
+    font-size: 28px;
+}
 
-</div>
+.summary_value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #003d79;
+}
+
+.summary_label {
+    font-size: 13px;
+    color: #666;
+}
+
+.courses_section {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.section_header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #003d79;
+}
+
+.section_title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.courses_list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.course_card {
+    border: 1px solid #f0f0f0;
+    border-radius: 8px;
+    padding: 16px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.course_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.course_title {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.course_meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: #666;
+    font-size: 13px;
+}
+
+.meta_item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.course_status {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.status_badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status_in_progress { background: #e6f7ff; color: #1890ff; }
+.status_completed { background: #f6ffed; color: #52c41a; }
+.status_pending { background: #fff7e6; color: #fa8c16; }
+
+.badge_warning {
+    padding: 3px 8px;
+    background: #fff1f0;
+    color: #f5222d;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.course_progress {
+    margin: 10px 0;
+}
+
+.progress_info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #666;
+}
+
+.progress_value {
+    color: #003d79;
+    font-weight: 600;
+}
+
+.progress_bar_container {
+    width: 100%;
+    height: 10px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress_bar {
+    height: 100%;
+    background: linear-gradient(90deg, #003d79, #1890ff);
+    transition: width 0.3s ease;
+}
+
+.progress_extra {
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #666;
+}
+
+.course_actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.btn_link {
+    color: #003d79;
+    text-decoration: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border: 1px solid #003d79;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn_link:hover {
+    background: #003d79;
+    color: #fff;
+}
+
+.btn_link.secondary {
+    border-color: #d0d7de;
+    color: #666;
+}
+
+.btn_link.secondary:hover {
+    background: #f5f7fa;
+}
+
+.loading, .error, .empty_state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 14px;
+}
+
+.error { color: #f56c6c; }
+
+.message_toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10001;
+    min-width: 250px;
+    display: none;
+    font-size: 14px;
+}
+
+.message_toast.success { background: #52c41a; color: #fff; }
+.message_toast.error { background: #f5222d; color: #fff; }
+
+@media (max-width: 1280px) {
+    .progress_container { width: 95%; }
+    .summary_cards { grid-template-columns: repeat(2, 1fr); }
+    .progress_extra { flex-direction: column; gap: 4px; }
+}
+</style>
 </body>
-
 </html>
